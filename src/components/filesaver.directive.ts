@@ -3,7 +3,7 @@ import { Directive, ElementRef, Input, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import { FileSaverService } from 'ngx-filesaver';
+import { FileSaverService } from './filesaver.provider';
 import { saveAs } from 'file-saver';
 
 @Directive({ selector: '[fileSaver]' })

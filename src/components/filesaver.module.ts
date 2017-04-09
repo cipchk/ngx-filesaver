@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
+import { HttpModule } from "@angular/http";
 import { FileSaverDirective } from './filesaver.directive';
 import { FileSaverService } from './filesaver.provider';
-import { HttpModule } from "@angular/http";
 
 @NgModule({
   imports: [HttpModule],
