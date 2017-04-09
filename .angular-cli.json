@@ -5,21 +5,18 @@
   },
   "apps": [
     {
-      "root": "src",
-      "outDir": "dist",
+      "root": "demo/src",
+      "outDir": "demo/dist",
       "assets": [
-        "assets",
-        "favicon.ico"
+        "assets"
       ],
       "index": "index.html",
       "main": "main.ts",
       "polyfills": "polyfills.ts",
-      "test": "test.ts",
-      "tsconfig": "tsconfig.app.json",
-      "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
+      "test": "../../scripts/test.ts",
+      "tsconfig": "tsconfig.json",
+      "prefix": "",
       "styles": [
-        "styles.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
@@ -34,17 +31,6 @@
       "config": "./protractor.conf.js"
     }
   },
-  "lint": [
-    {
-      "project": "src/tsconfig.app.json"
-    },
-    {
-      "project": "src/tsconfig.spec.json"
-    },
-    {
-      "project": "e2e/tsconfig.e2e.json"
-    }
-  ],
   "test": {
     "karma": {
       "config": "./karma.conf.js"

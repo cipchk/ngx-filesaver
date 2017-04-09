@@ -16,5 +16,11 @@
       "es2016",
       "dom"
     ]
-  }
+  },
+  "exclude": [
+    "node_modules", "bundles", "dist"
+  ],
+  "files": [
+    "./src/ngx-filesaver.ts"
+  ]
 }

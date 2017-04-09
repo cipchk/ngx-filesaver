@@ -1,0 +1,17 @@
+<p>排版问题，以下只是示例，关于使用方法见README.md。</p>
+<h1>文本型</h1>
+<textarea [(ngModel)]="text"></textarea>
+<button type="button" (click)="onDown('txt')">Save Text</button>
+<button type="button" (click)="onDown('json')">Save JSON</button>
+
+<h1>远程文件下载</h1>
+<button type="button" (click)="onDown('docx', true)">Save Word</button>
+<button type="button" (click)="onDown('xlsx', true)">Save Excel</button>
+<button type="button" (click)="onDown('csv', true)">Save CSV</button>
+<button type="button" (click)="onDown('pptx', true)">Save PPT</button>
+<button type="button" (click)="onDown('pdf', true)">Save PDF</button>
+<button type="button" (click)="onDown('zip', true)">Save Zip</button>
+<button type="button" (click)="onDown('7z', true)">Save 7z</button>
+<button type="button" (click)="onDown('jpg', true)">Save JPG</button>
+<button type="button" (click)="onDown('gif', true)">Save Gif</button>
+<button type="button" (click)="onDown('png', true)">Save Png</button>

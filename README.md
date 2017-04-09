@@ -1,28 +1,90 @@
-# NgxFilesaver
+# ngx-filesaver
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.
+Simple file save with FileSaver.js
 
-## Development server
+[![Build Status](https://travis-ci.org/cipchk/ngx-filesaver.svg?branch=master)](https://travis-ci.org/cipchk/ngx-filesaver)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## 示例
 
-## Code scaffolding
+[demo]()
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
+## 安装
 
-## Build
+```
+npm install file-saver ngx-filesaver --save
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+添加 `FileSaverModule` 模块到项目中：
 
-## Running unit tests
+```
+import { FileSaverModule } from 'ngx-filesaver';
+@NgModule({
+  imports: [ FileSaverModule ]
+})
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 使用方法
 
-## Running end-to-end tests
+支持服务 `FileSaverService.save()` 或属性指令 `fileSaver` 两种保存方式。
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+### 1、FileSaverService
 
-## Further help
+```typescript
+constructor(private _http: Http, private _FileSaverService: FileSaverService) {
+}
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+onSave() {
+  let options = new RequestOptions({
+    responseType: ResponseContentType.Blob // 这里必须是Blob类型
+  });
+
+  this._http.get('demo.pdf', options).subscribe(res => {
+    this._FileSaverService.save((<any>res)._body, fileName);
+  });
+}
+```
+
+### 2、fileSaver 属性指令
+
+#### 配置型
+
+```html
+<button type="button" 
+        fileSaver 
+        [fileName]="'中文pdf.pdf'"
+        [url]="'assets/files/demo.pdf'"
+        [header]="{ token: 'demo' }"
+        [query]="{ pi: 1, name: 'demo' }">Download PDF</button>
+```
+
+**fileSaver**：属性指令名称。
+
+**url**：下路路径。
+
+**fileName**：文件名。【选填】
+
+**header**：请求的 `headers` 属性值，一般用来指定 _token_ 之类。【选填】
+
+**query**：额外的查询参数。【选填】
+
+
+
+#### 自定义Http型
+
+```html
+<button type="button" 
+        fileSaver 
+        [http]="onRemote('pdf', true)">Download PDF</button>
+```
+
+```typescript
+onRemote(type: string, fromRemote: boolean): Observable<Response> {
+  let options = new RequestOptions({
+    responseType: ResponseContentType.Blob
+  });
+  return this._http.get(`assets/files/demo.${type}`, options).map(response => {
+    response.headers.set('filename', `demo.${type}`)
+    return response;
+  });
+}
+```
