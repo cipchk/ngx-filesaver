@@ -6,7 +6,7 @@ Simple file save with FileSaver.js
 
 ## 示例
 
-[demo]()
+[demo](https://cipchk.github.io/ngx-filesaver/)
 
 ## 安装
 
