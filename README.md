@@ -2,6 +2,7 @@
 
 Simple file save with FileSaver.js
 
+[![NPM version](https://img.shields.io/npm/v/ngx-filesaver.svg)](https://www.npmjs.com/package/ngx-filesaver)
 [![Build Status](https://travis-ci.org/cipchk/ngx-filesaver.svg?branch=master)](https://travis-ci.org/cipchk/ngx-filesaver)
 
 ## 示例
@@ -88,3 +89,11 @@ onRemote(type: string, fromRemote: boolean): Observable<Response> {
   });
 }
 ```
+
+
+#### 关于文件名
+
+文件名的获取按以下优先级：fileName =》 response.headers.get('filename') =》 response.headers.get('x-filename')。
+
+如果你请求的是一个CORS跨域地址，需要注意设置 `Access-Control-Allow-Headers: filename`，以免无法获取。
+
