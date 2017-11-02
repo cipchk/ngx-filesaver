@@ -1,9 +1,6 @@
 {
   "name": "ngx-filesaver",
-  "dependencies": {
-    "file-saver": "*"
-  },
   "peerDependencies": {
-    "file-saver": "*"
+    "file-saver": "^1.3.3"
   }
 }

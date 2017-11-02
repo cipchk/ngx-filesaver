@@ -1,7 +1,7 @@
 import { Http, RequestOptions, Headers, URLSearchParams, ResponseContentType, Response } from '@angular/http';
 import { Directive, ElementRef, Input, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 import { FileSaverService } from './filesaver.provider';
 import { saveAs } from 'file-saver';

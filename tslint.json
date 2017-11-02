@@ -9,7 +9,7 @@
       true,
       "check-space"
     ],
-    "curly": true,
+    "curly": false,
     "eofline": true,
     "forin": true,
     "import-blacklist": [true, "rxjs"],
@@ -21,14 +21,12 @@
     "interface-over-type-literal": true,
     "label-position": true,
     "max-line-length": [
-      true,
+        false,
       140
     ],
     "member-access": false,
     "member-ordering": [
-      true,
-      "static-before-instance",
-      "variables-before-functions"
+        false
     ],
     "no-arg": true,
     "no-bitwise": true,
@@ -57,7 +55,7 @@
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [
-      true,
+      false,
       "check-open-brace",
       "check-catch",
       "check-else",
@@ -98,8 +96,8 @@
       "check-type"
     ],
 
-    "directive-selector": [true, "attribute", "app", "camelCase"],
-    "component-selector": [true, "element", "app", "kebab-case"],
+    "directive-selector": [false, "attribute", "app", "camelCase"],
+    "component-selector": [false, "element", "app", "kebab-case"],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-host-property-decorator": true,

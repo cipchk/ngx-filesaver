@@ -6,7 +6,7 @@ export class FileSaverService {
 
   constructor() { }
 
-  public genType(fileName?: string): string {
+  genType(fileName?: string): string {
     if (!fileName || fileName.lastIndexOf('.') === -1) return 'text/plain';
     let type = fileName.substr(fileName.lastIndexOf('.') + 1);
     switch (type) {
@@ -22,7 +22,7 @@ export class FileSaverService {
     }
   }
 
-  public save(blob: Blob, fileName?: string, filtType?: string): void {
+  save(blob: Blob, fileName?: string, filtType?: string): void {
     if (!blob) {
       throw new Error('必须指定Blod');
     }
@@ -30,8 +30,8 @@ export class FileSaverService {
     saveAs(new Blob([blob], { type: filtType || blob.type || this.genType(fileName) }), decodeURI(fileName || 'download'));
   }
 
-  public saveText(txt: string, fileName?: string): void {
-    const blob = new Blob([txt], fileName);
+  saveText(txt: string, fileName?: string): void {
+    const blob = new Blob([txt]);
     this.save(blob, fileName);
   }
 }
