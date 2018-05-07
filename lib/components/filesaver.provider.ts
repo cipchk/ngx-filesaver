@@ -8,7 +8,7 @@ export class FileSaverService {
 
   genType(fileName?: string): string {
     if (!fileName || fileName.lastIndexOf('.') === -1) return 'text/plain';
-    let type = fileName.substr(fileName.lastIndexOf('.') + 1);
+    const type = fileName.substr(fileName.lastIndexOf('.') + 1);
     switch (type) {
       case 'txt':
         return 'text/plain';

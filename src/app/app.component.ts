@@ -7,7 +7,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
     <p>Simple file save with FileSaver.js</p>
     <demo></demo>
   `,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-export class AppComponent {
-}
+export class AppComponent {}

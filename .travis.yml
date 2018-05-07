@@ -1,6 +1,24 @@
+sudo: required
 language: node_js
 node_js:
-  - "8"
+  - "8.11.0"
+
+env:
+  - TASK=test
+  - TASK=lint
+  - TASK=build
+  - TASK=site:build
+
+addons:
+apt:
+  sources:
+    - google-chrome
+  packages:
+    - google-chrome-stable
+    - google-chrome-beta
+
+git:
+  depth: 1
 
 before_install:
   - export CHROME_BIN=chromium-browser
@@ -8,5 +26,8 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 script:
-  - npm run pretest
-  - npm run test
+  - npm run $TASK
+  - |
+    if [ "$TASK" = "test" ]; then
+      cat ./coverage/lcov.info | ./node_modules/.bin/codecov
+    fi

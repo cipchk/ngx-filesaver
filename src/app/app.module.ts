@@ -10,20 +10,15 @@ import { AppComponent } from './app.component';
 import { DemoComponent } from './components/demo.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DemoComponent
-  ],
+  declarations: [AppComponent, DemoComponent],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     FileSaverModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-
-export class FileSaverDemoModule {
-}
+export class FileSaverDemoModule {}

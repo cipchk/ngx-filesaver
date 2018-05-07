@@ -7,7 +7,8 @@ Simple file save with FileSaver.js
 
 ## 示例
 
-[demo](https://cipchk.github.io/ngx-filesaver/)
+- [demo](https://cipchk.github.io/ngx-filesaver/)
+- [Stackblitz](https://stackblitz.com/edit/ngx-filesaver)
 
 ## 安装
 
@@ -50,31 +51,35 @@ onSave() {
 #### 配置型
 
 ```html
-<button type="button" 
-        fileSaver 
+<button type="button"
+        fileSaver
+        [method]="'GET'"
         [fileName]="'中文pdf.pdf'"
         [url]="'assets/files/demo.pdf'"
         [header]="{ token: 'demo' }"
-        [query]="{ pi: 1, name: 'demo' }">Download PDF</button>
+        [query]="{ pi: 1, name: 'demo' }"
+        (success)="onSuc($event)"
+        (error)="onErr($event)">Download PDF</button>
 ```
 
 **fileSaver**：属性指令名称。
+**参数说明**
 
-**url**：下路路径。
-
-**fileName**：文件名。【选填】
-
-**header**：请求的 `headers` 属性值，一般用来指定 _token_ 之类。【选填】
-
-**query**：额外的查询参数。【选填】
-
-
+参数 | 说明 | 类型 | 默认值
+----|------|-----|------
+method | 请求方法类型 | `string` | `GET`
+url | 下路路径 | `string` | -
+fileName | 文件名 | `string` | -
+query | 额外的查询参数，等同 `params` 值 | `string` | -
+header | 请求的 `headers` 属性值，一般用来指定 _token_ 之类 | `any` | -
+success | 下载成功回调 | `EventEmitter<any>` | -
+error | 下载错误回调 | `EventEmitter<any>` | -
 
 #### 自定义Http型
 
 ```html
-<button type="button" 
-        fileSaver 
+<button type="button"
+        fileSaver
         [http]="onRemote('pdf', true)">Download PDF</button>
 ```
 
