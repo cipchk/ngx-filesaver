@@ -4,9 +4,6 @@
 /dist
 /tmp
 /out-tsc
-/__gen_lib
-/publish-es5
-/publish-es2015
 /publish
 
 # dependencies
@@ -37,6 +34,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+yarn.lock
 
 # System Files
 .DS_Store

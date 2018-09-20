@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
-import { FileSaverDirective } from './components/filesaver.directive';
-import { FileSaverService } from './components/filesaver.provider';
+import { FileSaverDirective } from './filesaver.directive';
+import { FileSaverService } from './filesaver.provider';
 
 @NgModule({
   imports: [HttpClientModule],

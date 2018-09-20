@@ -5,20 +5,18 @@ Simple file save with FileSaver.js
 [![NPM version](https://img.shields.io/npm/v/ngx-filesaver.svg)](https://www.npmjs.com/package/ngx-filesaver)
 [![Build Status](https://travis-ci.org/cipchk/ngx-filesaver.svg?branch=master)](https://travis-ci.org/cipchk/ngx-filesaver)
 
-[中文版](README.zh-CN.md)
-
-## Examples
+## 示例
 
 - [demo](https://cipchk.github.io/ngx-filesaver/)
 - [Stackblitz](https://stackblitz.com/edit/ngx-filesaver)
 
-## Installation
+## 安装
 
 ```
 npm install file-saver ngx-filesaver --save
 ```
 
-Add the `FileSaverModule` module to your project：
+添加 `FileSaverModule` 模块到项目中：
 
 ```
 import { FileSaverModule } from 'ngx-filesaver';
@@ -27,9 +25,9 @@ import { FileSaverModule } from 'ngx-filesaver';
 })
 ```
 
-## Instructions
+## 使用方法
 
-There are two ways to save a file: using `FileSaverService.save()` or using the `fileSaver` directive.
+支持服务 `FileSaverService.save()` 或属性指令 `fileSaver` 两种保存方式。
 
 ### 1、FileSaverService
 
@@ -48,9 +46,9 @@ onSave() {
 }
 ```
 
-### 2、fileSaver directive
+### 2、fileSaver 属性指令
 
-#### Configuration example
+#### 配置型
 
 ```html
 <button type="button"
@@ -64,20 +62,20 @@ onSave() {
         (error)="onErr($event)">Download PDF</button>
 ```
 
-**fileSaver**： the directive name
-**Parameters**
+**fileSaver**：属性指令名称。
+**参数说明**
 
-Parameter | Description | Type | Default
+参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
-method | Request method type | `string` | `GET`
-url | Request URL | `string` | -
-fileName | Filename when downloading | `string` | -
-query | Additional query parameters. Equivalent to `params` value | `string` | -
-header | Header configuration. Usually used for especifying access tokens | `any` | -
-success | Download success callback | `EventEmitter<any>` | -
-error | Download error callback | `EventEmitter<any>` | -
+method | 请求方法类型 | `string` | `GET`
+url | 下路路径 | `string` | -
+fileName | 文件名 | `string` | -
+query | 额外的查询参数，等同 `params` 值 | `string` | -
+header | 请求的 `headers` 属性值，一般用来指定 _token_ 之类 | `any` | -
+success | 下载成功回调 | `EventEmitter<any>` | -
+error | 下载错误回调 | `EventEmitter<any>` | -
 
-#### Custom HTTP type
+#### 自定义Http型
 
 ```html
 <button type="button"
@@ -98,13 +96,8 @@ onRemote(type: string, fromRemote: boolean): Observable<Response> {
 ```
 
 
-#### About filenames
+#### 关于文件名
 
-The name for the downloaded file is obtained with the following priority:
+文件名的获取按以下优先级：fileName =》 response.headers.get('filename') =》 response.headers.get('x-filename')。
 
-1. fileName
-2. response.headers.get('filename')
-3. response.headers.get('x-filename')。
-
-If you are requesting a CORS address, you need to pay attention to the request headers. Setting `Access-Control-Allow-Headers: filename` should be sufficient
-
+如果你请求的是一个CORS跨域地址，需要注意设置 `Access-Control-Allow-Headers: filename`，以免无法获取。

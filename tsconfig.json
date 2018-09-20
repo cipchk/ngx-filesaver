@@ -12,7 +12,7 @@
     "lib": ["es2017", "dom"],
     "baseUrl": "./",
     "paths": {
-      "ngx-filesaver": ["./lib/ngx-filesaver.module"],
+      "ngx-filesaver": ["./lib/src/ngx-filesaver.module"],
       "ngx-filesaver/*": ["./lib/*"]
     }
   }

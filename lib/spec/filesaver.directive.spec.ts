@@ -9,7 +9,7 @@ import {
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as fs from 'file-saver';
 
-import { FileSaverModule } from '../ngx-filesaver.module';
+import { FileSaverModule } from '../src/filesaver.module';
 
 function genFile(ext: string, isRealFile = true): Blob {
   const blob = new Blob([
