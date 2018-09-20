@@ -1,11 +1,8 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FileSaverService {
-
-  constructor() { }
-
   genType(fileName?: string): string {
     if (!fileName || fileName.lastIndexOf('.') === -1) return 'text/plain';
     const type = fileName.substr(fileName.lastIndexOf('.') + 1);
