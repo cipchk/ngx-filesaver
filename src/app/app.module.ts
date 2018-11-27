@@ -1,8 +1,8 @@
-import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { FileSaverModule } from 'ngx-filesaver';
 
@@ -13,8 +13,8 @@ import { DemoComponent } from './components/demo.component';
   declarations: [AppComponent, DemoComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
     FormsModule,
-    HttpModule,
     FileSaverModule,
     CommonModule,
   ],
