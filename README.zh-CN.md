@@ -36,11 +36,9 @@ constructor(private _http: Http, private _FileSaverService: FileSaverService) {
 }
 
 onSave() {
-  let options = new RequestOptions({
+  this._http.get('demo.pdf', {
     responseType: ResponseContentType.Blob // 这里必须是Blob类型
-  });
-
-  this._http.get('demo.pdf', options).subscribe(res => {
+  }).subscribe(res => {
     this._FileSaverService.save((<any>res)._body, fileName);
   });
 }
@@ -83,12 +81,11 @@ error | 下载错误回调 | `EventEmitter<any>` | -
         [http]="onRemote('pdf', true)">Download PDF</button>
 ```
 
-```typescript
+```ts
 onRemote(type: string, fromRemote: boolean): Observable<Response> {
-  let options = new RequestOptions({
+  return this._http.get(`assets/files/demo.${type}`, {
     responseType: ResponseContentType.Blob
-  });
-  return this._http.get(`assets/files/demo.${type}`, options).map(response => {
+  }).map(response => {
     response.headers.set('filename', `demo.${type}`)
     return response;
   });
