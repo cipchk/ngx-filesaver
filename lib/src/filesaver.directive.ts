@@ -11,7 +11,10 @@ import { Observable } from 'rxjs';
 
 import { FileSaverService } from './filesaver.service';
 
-@Directive({ selector: '[fileSaver]' })
+@Directive({
+  selector: '[fileSaver]',
+  exportAs: 'fileSaver'
+})
 export class FileSaverDirective {
   @Input() method = 'GET';
   @Input() http: Observable<HttpResponse<Blob>>;
@@ -19,10 +22,8 @@ export class FileSaverDirective {
   @Input() header: any;
   @Input() url: string;
   @Input() fileName: string;
-  /** 成功回调 */
-  @Output() success: EventEmitter<any> = new EventEmitter<any>();
-  /** 错误回调 */
-  @Output() error: EventEmitter<any> = new EventEmitter<any>();
+  @Output() readonly success = new EventEmitter<any>();
+  @Output() readonly error = new EventEmitter<any>();
 
   constructor(
     private el: ElementRef,
@@ -39,7 +40,7 @@ export class FileSaverDirective {
   }
 
   @HostListener('click')
-  onclick() {
+  _click() {
     let _http = this.http;
     if (!_http) {
       const params = new HttpParams(),

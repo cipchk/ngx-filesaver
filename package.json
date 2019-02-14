@@ -1,6 +1,6 @@
 {
   "name": "ngx-filesaver",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Simple file save with FileSaver.js",
   "repository": {
     "type": "git",
@@ -72,7 +72,8 @@
     "tsickle": "^0.34.0",
     "@types/file-saver": "^2.0.0",
     "file-saver": "^2.0.0",
-    "gh-pages": "^2.0.1"
+    "gh-pages": "^2.0.1",
+    "codecov": "^3.2.0"
   },
   "ngPackage": {
     "lib": {
