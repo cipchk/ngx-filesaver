@@ -21,7 +21,7 @@ export class FileSaverService {
 
   save(blob: Blob, fileName?: string, filtType?: string): void {
     if (!blob) {
-      throw new Error('Muse spcify blod argument');
+      throw new Error('Data argument should be a blob instance');
     }
 
     saveAs(new Blob([blob], { type: filtType || blob.type || this.genType(fileName) }), decodeURI(fileName || 'download'));
