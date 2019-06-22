@@ -1,19 +1,11 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  HostListener,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { Directive, ElementRef, Input, HostListener, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { FileSaverService } from './filesaver.service';
 
 @Directive({
   selector: '[fileSaver]',
-  exportAs: 'fileSaver'
+  exportAs: 'fileSaver',
 })
 export class FileSaverDirective {
   @Input() method = 'GET';
@@ -22,58 +14,59 @@ export class FileSaverDirective {
   @Input() header: any;
   @Input() url: string;
   @Input() fileName: string;
-  @Output() readonly success = new EventEmitter<any>();
+  @Output() readonly success = new EventEmitter<HttpResponse<Blob>>();
   @Output() readonly error = new EventEmitter<any>();
 
-  constructor(
-    private el: ElementRef,
-    private _FileSaverService: FileSaverService,
-    private _httpClient: HttpClient,
-  ) {}
+  constructor(private el: ElementRef<HTMLButtonElement>, private fss: FileSaverService, private httpClient: HttpClient) {
+    if (!fss.isFileSaverSupported) {
+      el.nativeElement.classList.add(`filesaver__not-support`);
+    }
+  }
 
   private getName(res: HttpResponse<Blob>) {
-    return decodeURI(
-      this.fileName ||
-      res.headers.get('filename') ||
-      res.headers.get('x-filename')
-    );
+    return decodeURI(this.fileName || res.headers.get('filename') || res.headers.get('x-filename'));
   }
 
   @HostListener('click')
   _click() {
-    let _http = this.http;
-    if (!_http) {
-      const params = new HttpParams(),
-        _data = this.query || {};
+    if (!this.fss.isFileSaverSupported) {
+      return;
+    }
+    let req = this.http;
+    if (!req) {
+      const params = new HttpParams();
+      const query = this.query || {};
       // tslint:disable-next-line:forin
-      for (const item in _data) {
-        params.set(item, _data[item]);
+      for (const item in query) {
+        params.set(item, query[item]);
       }
 
-      _http = this._httpClient.request(this.method, this.url, {
+      req = this.httpClient.request(this.method, this.url, {
         observe: 'response',
         responseType: 'blob',
         headers: this.header,
-        params
+        params,
       });
     }
 
-    this.el.nativeElement.disabled = true;
-    _http.subscribe(
+    this.setDisabled(true);
+    req.subscribe(
       res => {
         if (res.status !== 200 || res.body.size <= 0) {
           this.error.emit(res);
           return;
         }
-        this._FileSaverService.save(res.body, this.getName(res));
+        this.fss.save(res.body, this.getName(res));
         this.success.emit(res);
       },
-      err => {
-        this.error.emit(err);
-      },
-      () => {
-        this.el.nativeElement.disabled = false;
-      },
+      err => this.error.emit(err),
+      () => this.setDisabled(false),
     );
+  }
+
+  private setDisabled(status: boolean) {
+    const el = this.el.nativeElement;
+    el.disabled = status;
+    el.classList[status ? 'add' : 'remove'](`filesaver__disabled`);
   }
 }

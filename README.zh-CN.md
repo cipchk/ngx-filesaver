@@ -70,7 +70,7 @@ url | 下路路径 | `string` | -
 fileName | 文件名 | `string` | -
 query | 额外的查询参数，等同 `params` 值 | `string` | -
 header | 请求的 `headers` 属性值，一般用来指定 _token_ 之类 | `any` | -
-success | 下载成功回调 | `EventEmitter<any>` | -
+success | 下载成功回调 | `EventEmitter<HttpResponse<Blob>>` | -
 error | 下载错误回调 | `EventEmitter<any>` | -
 
 #### 自定义Http型
@@ -92,9 +92,15 @@ onRemote(type: string, fromRemote: boolean): Observable<Response> {
 }
 ```
 
-
 #### 关于文件名
 
 文件名的获取按以下优先级：fileName =》 response.headers.get('filename') =》 response.headers.get('x-filename')。
 
 如果你请求的是一个CORS跨域地址，需要注意设置 `Access-Control-Allow-Headers: filename`，以免无法获取。
+
+#### 类名
+
+| 类名 | 描述 |
+| --- | ---- |
+| `filesaver__not-support` | 不 [兼容](https://github.com/eligrey/FileSaver.js/#supported-browsers) `Blob` 时 |
+| `filesaver__disabled` | 请求过程中 |

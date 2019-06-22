@@ -3,8 +3,18 @@ import { saveAs } from 'file-saver';
 
 @Injectable({ providedIn: 'root' })
 export class FileSaverService {
+  get isFileSaverSupported(): boolean {
+    try {
+      return !!new Blob();
+    } catch (e) {
+      return false;
+    }
+  }
+
   genType(fileName?: string): string {
-    if (!fileName || fileName.lastIndexOf('.') === -1) return 'text/plain';
+    if (!fileName || fileName.lastIndexOf('.') === -1) {
+      return 'text/plain';
+    }
     const type = fileName.substr(fileName.lastIndexOf('.') + 1);
     switch (type) {
       case 'txt':

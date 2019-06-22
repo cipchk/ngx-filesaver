@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { FileSaverService } from 'ngx-filesaver';
 
 @Component({
-  selector: 'demo',
+  selector: 'app-demo',
   templateUrl: './demo.component.html',
   styleUrls: ['./demo.component.scss'],
 })
@@ -12,8 +12,8 @@ export class DemoComponent implements OnInit {
   public fileName: string;
 
   constructor(
-    private _httpClient: HttpClient,
-    private _FileSaverService: FileSaverService,
+    private httpClient: HttpClient,
+    private fileSaverService: FileSaverService,
   ) {}
 
   ngOnInit() {}
@@ -21,16 +21,16 @@ export class DemoComponent implements OnInit {
   onDown(type: string, fromRemote: boolean) {
     const fileName = `save.${type}`;
     if (fromRemote) {
-      this._httpClient.get(`assets/files/demo.${type}`, {
+      this.httpClient.get(`assets/files/demo.${type}`, {
         observe: 'response',
         responseType: 'blob'
       }).subscribe(res => {
-        this._FileSaverService.save(res.body, fileName);
+        this.fileSaverService.save(res.body, fileName);
       });
       return;
     }
-    const fileType = this._FileSaverService.genType(fileName);
+    const fileType = this.fileSaverService.genType(fileName);
     const txtBlob = new Blob([this.text], { type: fileType });
-    this._FileSaverService.save(txtBlob, fileName);
+    this.fileSaverService.save(txtBlob, fileName);
   }
 }
