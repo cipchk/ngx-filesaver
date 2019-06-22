@@ -108,5 +108,5 @@ If you are requesting a CORS address, you need to pay attention to the request h
 
 | Class Name | Description |
 | --- | ---- |
-| `filesaver__not-support` | Not compatible with `Blob` |
+| `filesaver__not-support` | Not [Supported Browsers](https://github.com/eligrey/FileSaver.js/#supported-browsers) |
 | `filesaver__disabled` | During http request |

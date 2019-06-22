@@ -102,5 +102,5 @@ onRemote(type: string, fromRemote: boolean): Observable<Response> {
 
 | 类名 | 描述 |
 | --- | ---- |
-| `filesaver__not-support` | 不兼容 `Blob` 时 |
+| `filesaver__not-support` | 不 [兼容](https://github.com/eligrey/FileSaver.js/#supported-browsers) `Blob` 时 |
 | `filesaver__disabled` | 请求过程中 |
