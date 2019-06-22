@@ -39,7 +39,7 @@ constructor(private _http: Http, private _FileSaverService: FileSaverService) {
 
 onSave() {
   this._http.get('demo.pdf', {
-    responseType: ResponseContentType.Blob // 这里必须是Blob类型
+    responseType: ResponseContentType.Blob // This must be a Blob type
   }).subscribe(res => {
     this._FileSaverService.save((<any>res)._body, fileName);
   });
@@ -72,7 +72,7 @@ url | Request URL | `string` | -
 fileName | Filename when downloading | `string` | -
 query | Additional query parameters. Equivalent to `params` value | `string` | -
 header | Header configuration. Usually used for especifying access tokens | `any` | -
-success | Download success callback | `EventEmitter<any>` | -
+success | Download success callback | `EventEmitter<HttpResponse<Blob>>` | -
 error | Download error callback | `EventEmitter<any>` | -
 
 #### Custom HTTP type
@@ -94,7 +94,6 @@ onRemote(type: string, fromRemote: boolean): Observable<Response> {
 }
 ```
 
-
 #### About filenames
 
 The name for the downloaded file is obtained with the following priority:
@@ -105,3 +104,9 @@ The name for the downloaded file is obtained with the following priority:
 
 If you are requesting a CORS address, you need to pay attention to the request headers. Setting `Access-Control-Allow-Headers: filename` should be sufficient
 
+#### Class Name
+
+| Class Name | Description |
+| --- | ---- |
+| `filesaver__not-support` | Not compatible with `Blob` |
+| `filesaver__disabled` | During http request |

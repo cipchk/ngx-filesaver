@@ -4,7 +4,8 @@
     "sourceMap": false,
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
-    "module": "es2015",
+    "module": "esnext",
+    "moduleResolution": "node",
     "types": [],
     "paths": {
       "ngx-filesaver": ["../lib/index"],

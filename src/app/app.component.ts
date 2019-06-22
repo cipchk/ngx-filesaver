@@ -5,7 +5,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
   template: `
     <h1>ngx-filesaver</h1>
     <p>Simple file save with FileSaver.js</p>
-    <demo></demo>
+    <app-demo></app-demo>
   `,
   encapsulation: ViewEncapsulation.None,
 })
