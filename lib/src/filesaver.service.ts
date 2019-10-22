@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { saveAs } from 'file-saver';
+import { saveAs, FileSaverOptions } from 'file-saver';
 
 @Injectable({ providedIn: 'root' })
 export class FileSaverService {
@@ -29,16 +29,17 @@ export class FileSaverService {
     }
   }
 
-  save(blob: Blob, fileName?: string, filtType?: string): void {
+  save(blob: Blob, fileName?: string, filtType?: string, option?: FileSaverOptions): void {
     if (!blob) {
       throw new Error('Data argument should be a blob instance');
     }
 
-    saveAs(new Blob([blob], { type: filtType || blob.type || this.genType(fileName) }), decodeURI(fileName || 'download'));
+    const file = new Blob([blob], { type: filtType || blob.type || this.genType(fileName) });
+    saveAs(file, decodeURI(fileName || 'download'), option);
   }
 
-  saveText(txt: string, fileName?: string): void {
+  saveText(txt: string, fileName?: string, option?: FileSaverOptions): void {
     const blob = new Blob([txt]);
-    this.save(blob, fileName);
+    this.save(blob, fileName, null, option);
   }
 }

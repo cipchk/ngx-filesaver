@@ -1,5 +1,7 @@
 sudo: required
+dist: trusty
 language: node_js
+
 node_js:
   - '10.9.0'
 
@@ -9,20 +11,21 @@ addons:
       - google-chrome
     packages:
       - google-chrome-stable
-      - google-chrome-beta
 
 git:
   depth: 1
 
 cache:
-  yarn: true
+  npm: true
   directories:
-    - ./node_modules
+    - ./node_modules/
 
 before_install:
-  - export CHROME_BIN=chromium-browser
+  - set -e
+  - export NG_CLI_ANALYTICS=ci
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+  - sleep 3
 
 env:
   - TASK=build

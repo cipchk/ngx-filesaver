@@ -1,22 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FileSaverService } from 'ngx-filesaver';
+import { FileSaverOptions } from 'file-saver';
 
 @Component({
   selector: 'app-demo',
   templateUrl: './demo.component.html',
   styleUrls: ['./demo.component.scss'],
 })
-export class DemoComponent implements OnInit {
-  public text = `{ "text": "This is text file!中文" }`;
-  public fileName: string;
+export class DemoComponent {
+  text = `{ "text": "This is text file!中文" }`;
+  fileName: string;
+  options: FileSaverOptions = {
+    autoBom: false,
+  };
 
   constructor(
     private httpClient: HttpClient,
     private fileSaverService: FileSaverService,
   ) {}
-
-  ngOnInit() {}
 
   onDown(type: string, fromRemote: boolean) {
     const fileName = `save.${type}`;
@@ -31,6 +33,6 @@ export class DemoComponent implements OnInit {
     }
     const fileType = this.fileSaverService.genType(fileName);
     const txtBlob = new Blob([this.text], { type: fileType });
-    this.fileSaverService.save(txtBlob, fileName);
+    this.fileSaverService.save(txtBlob, fileName, null, this.options);
   }
 }

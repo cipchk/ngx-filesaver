@@ -1,10 +1,14 @@
-<p>排版问题，以下只是示例，关于使用方法见<a href="https://github.com/cipchk/ngx-filesaver/blob/master/README.md" target="_blank">README.md</a>。</p>
-<h1>文本型</h1>
+<h1>Filesaver option</h1>
+<label>
+  <input type="checkbox" [(ngModel)]="options.autoBom"> AutoBOM
+</label>
+
+<h1>Text Document</h1>
 <textarea [(ngModel)]="text"></textarea>
 <button type="button" (click)="onDown('txt', false)">Save Text</button>
 <button type="button" (click)="onDown('json', false)">Save JSON</button>
 
-<h1>远程文件下载</h1>
+<h1>Remote file download</h1>
 <button type="button" (click)="onDown('docx', true)">Save Word</button>
 <button type="button" (click)="onDown('xlsx', true)">Save Excel</button>
 <button type="button" (click)="onDown('csv', true)">Save CSV</button>
