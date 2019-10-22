@@ -1,5 +1,7 @@
 sudo: required
+dist: trusty
 language: node_js
+
 node_js:
   - '10.9.0'
 
@@ -14,9 +16,9 @@ git:
   depth: 1
 
 cache:
-  yarn: true
+  npm: true
   directories:
-    - ./node_modules
+    - ./node_modules/
 
 before_install:
   - set -e
