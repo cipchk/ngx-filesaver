@@ -1,6 +1,7 @@
 import { Directive, ElementRef, Input, HostListener, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { FileSaverOptions } from 'file-saver';
 import { FileSaverService } from './filesaver.service';
 
 @Directive({
@@ -14,6 +15,7 @@ export class FileSaverDirective {
   @Input() header: any;
   @Input() url: string;
   @Input() fileName: string;
+  @Input() fsOptions: FileSaverOptions;
   @Output() readonly success = new EventEmitter<HttpResponse<Blob>>();
   @Output() readonly error = new EventEmitter<any>();
 
@@ -56,7 +58,7 @@ export class FileSaverDirective {
           this.error.emit(res);
           return;
         }
-        this.fss.save(res.body, this.getName(res));
+        this.fss.save(res.body, this.getName(res), null, this.fsOptions);
         this.success.emit(res);
       },
       err => this.error.emit(err),

@@ -67,13 +67,14 @@ onSave() {
 
 Parameter | Description | Type | Default
 ----|------|-----|------
-method | Request method type | `string` | `GET`
-url | Request URL | `string` | -
-fileName | Filename when downloading | `string` | -
-query | Additional query parameters. Equivalent to `params` value | `string` | -
-header | Header configuration. Usually used for especifying access tokens | `any` | -
-success | Download success callback | `EventEmitter<HttpResponse<Blob>>` | -
-error | Download error callback | `EventEmitter<any>` | -
+`method` | Request method type | `string` | `GET`
+`url` | Request URL | `string` | -
+`fileName` | Filename when downloading | `string` | -
+`query` | Additional query parameters. Equivalent to `params` value | `string` | -
+`header` | Header configuration. Usually used for especifying access tokens | `any` | -
+`fsOptions` | FileSaver.js config, can be set `autoBom` value | `FileSaverOptions` | -
+`success` | Download success callback | `EventEmitter<HttpResponse<Blob>>` | -
+`error` | Download error callback | `EventEmitter<any>` | -
 
 #### Custom HTTP type
 

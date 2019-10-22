@@ -65,13 +65,14 @@ onSave() {
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
-method | 请求方法类型 | `string` | `GET`
-url | 下路路径 | `string` | -
-fileName | 文件名 | `string` | -
-query | 额外的查询参数，等同 `params` 值 | `string` | -
-header | 请求的 `headers` 属性值，一般用来指定 _token_ 之类 | `any` | -
-success | 下载成功回调 | `EventEmitter<HttpResponse<Blob>>` | -
-error | 下载错误回调 | `EventEmitter<any>` | -
+`method` | 请求方法类型 | `string` | `GET`
+`url` | 下路路径 | `string` | -
+`fileName` | 文件名 | `string` | -
+`query` | 额外的查询参数，等同 `params` 值 | `string` | -
+`header` | 请求的 `headers` 属性值，一般用来指定 _token_ 之类 | `any` | -
+`fsOptions` | FileSaver.js 配置，可以设置 `autoBom` 等参数值 | `FileSaverOptions` | -
+`success` | 下载成功回调 | `EventEmitter<HttpResponse<Blob>>` | -
+`error` | 下载错误回调 | `EventEmitter<any>` | -
 
 #### 自定义Http型
 
