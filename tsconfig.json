@@ -1,19 +1,27 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
     "target": "es2015",
     "typeRoots": ["node_modules/@types"],
-    "lib": ["es2018", "dom"],
-    "baseUrl": "./",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "paths": {
-      "ngx-filesaver": ["./lib/src/ngx-filesaver.module"],
-      "ngx-filesaver/*": ["./lib/*"]
+      "ngx-filesaver": ["lib/index"]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }
