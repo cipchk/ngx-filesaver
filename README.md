@@ -111,3 +111,22 @@ If you are requesting a CORS address, you need to pay attention to the request h
 | --- | ---- |
 | `filesaver__not-support` | Not [Supported Browsers](https://github.com/eligrey/FileSaver.js/#supported-browsers) |
 | `filesaver__disabled` | During http request |
+
+#### Configuring CommonJS dependencies
+
+> WARNING in node_modules/ngx-filesaver/ivy_ngcc/fesm2015/ngx-filesaver.js depends on file-saver. CommonJS or AMD dependencies can cause optimization bailouts.
+
+We cannot change this, the only way is to ignore it:
+
+```json
+"build": {
+  "builder": "@angular-devkit/build-angular:browser",
+  "options": {
+     "allowedCommonJsDependencies": [
+        "file-saver"
+     ]
+     ...
+   }
+   ...
+},
+```
