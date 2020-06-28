@@ -1,0 +1,13 @@
+{
+  "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../publish",
+  "deleteDestPath": true,
+  "lib": {
+    "amdId": "ngxFileSaver",
+    "umdId": "ngxFileSaver",
+    "entryFile": "index.ts",
+    "umdModuleIds": {
+      "file-saver": "saveAs"
+    }
+  }
+}
