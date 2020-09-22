@@ -36,11 +36,11 @@ export class FileSaverDirective {
     }
     let req = this.http;
     if (!req) {
-      const params = new HttpParams();
+      let params = new HttpParams();
       const query = this.query || {};
       // tslint:disable-next-line:forin
       for (const item in query) {
-        params.set(item, query[item]);
+        params = params.set(item, query[item]);
       }
 
       req = this.httpClient.request(this.method, this.url, {
