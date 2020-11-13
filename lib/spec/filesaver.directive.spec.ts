@@ -1,4 +1,4 @@
-// tslint:disable: no-use-before-declare
+// tslint:disable: no-use-before-declare deprecation
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, DebugElement, Injector, Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -39,7 +39,7 @@ describe('ngx-filesaveer:', () => {
     httpBed = injector.get(HttpTestingController as Type<HttpTestingController>);
   });
 
-  ['xlsx', 'docx', 'pptx', 'pdf'].forEach(ext => {
+  ['xlsx', 'docx', 'pptx', 'pdf'].forEach((ext) => {
     it(`should be down ${ext}`, () => {
       fixture.detectChanges();
       spyOn(fs, 'saveAs');
@@ -48,7 +48,7 @@ describe('ngx-filesaveer:', () => {
       }
       fixture.detectChanges();
       (dl.query(By.css('#down-' + ext)).nativeElement as HTMLButtonElement).click();
-      const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+      const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
       ret.flush(genFile(ext));
       expect(fs.saveAs).toHaveBeenCalled();
     });
@@ -62,7 +62,7 @@ describe('ngx-filesaveer:', () => {
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.flush(genFile('docx'), {
       headers: new HttpHeaders({ filename }),
     });
@@ -77,7 +77,7 @@ describe('ngx-filesaveer:', () => {
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.flush(genFile('docx'), {
       headers: new HttpHeaders({ 'x-filename': filename }),
     });
@@ -89,7 +89,7 @@ describe('ngx-filesaveer:', () => {
     spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.error(null, { status: 404 });
     expect(context.error).toHaveBeenCalled();
   });
@@ -99,7 +99,7 @@ describe('ngx-filesaveer:', () => {
     spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.flush(genFile('docx', false));
     expect(context.error).toHaveBeenCalled();
   });
@@ -111,7 +111,7 @@ describe('ngx-filesaveer:', () => {
     expect(context.error).not.toHaveBeenCalled();
     expect(fs.saveAs).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.flush(null, { status: 201, statusText: '201' });
     expect(fs.saveAs).not.toHaveBeenCalled();
     expect(context.error).toHaveBeenCalled();
@@ -120,7 +120,7 @@ describe('ngx-filesaveer:', () => {
   it('should be disabled when http request ing', () => {
     fixture.detectChanges();
     // tslint:disable-next-line: no-string-literal
-    dl.query(By.css('button')).injector.get(FileSaverDirective)['setDisabled'](true);
+    dl.query(By.css('button')).injector.get(FileSaverDirective).setDisabled(true);
     const el = dl.query(By.css('#down-xlsx')).nativeElement as HTMLButtonElement;
     expect(el.classList).toContain(`filesaver__disabled`);
   });
@@ -163,7 +163,7 @@ class TestComponent {
 
   fileName = 'demo中文';
 
-  success() {}
+  success(): void {}
 
-  error() {}
+  error(): void {}
 }

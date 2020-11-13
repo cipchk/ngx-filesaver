@@ -25,12 +25,12 @@ export class FileSaverDirective {
     }
   }
 
-  private getName(res: HttpResponse<Blob>) {
+  private getName(res: HttpResponse<Blob>): string {
     return decodeURI(this.fileName || res.headers.get('filename') || res.headers.get('x-filename'));
   }
 
   @HostListener('click')
-  _click() {
+  _click(): void {
     if (!this.fss.isFileSaverSupported) {
       return;
     }
@@ -53,7 +53,7 @@ export class FileSaverDirective {
 
     this.setDisabled(true);
     req.subscribe(
-      res => {
+      (res) => {
         if (res.status !== 200 || res.body.size <= 0) {
           this.error.emit(res);
           return;
@@ -61,12 +61,12 @@ export class FileSaverDirective {
         this.fss.save(res.body, this.getName(res), null, this.fsOptions);
         this.success.emit(res);
       },
-      err => this.error.emit(err),
+      (err) => this.error.emit(err),
       () => this.setDisabled(false),
     );
   }
 
-  private setDisabled(status: boolean) {
+  setDisabled(status: boolean): void {
     const el = this.el.nativeElement;
     el.disabled = status;
     el.classList[status ? 'add' : 'remove'](`filesaver__disabled`);
