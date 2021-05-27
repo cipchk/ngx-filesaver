@@ -119,7 +119,7 @@ describe('ngx-filesaveer:', () => {
   it('should be disabled when http request ing', () => {
     fixture.detectChanges();
     // tslint:disable-next-line: no-string-literal
-    dl.query(By.css('button')).injector.get(FileSaverDirective)['setDisabled'](true);
+    dl.query(By.css('button')).injector.get(FileSaverDirective).setDisabled(true);
     const el = dl.query(By.css('#down-xlsx')).nativeElement as HTMLButtonElement;
     expect(el.classList).toContain(`filesaver__disabled`);
   });
@@ -162,7 +162,7 @@ class TestComponent {
 
   fileName: string | null = 'demo中文';
 
-  success() {}
+  success(): void {}
 
-  error() {}
+  error(): void {}
 }

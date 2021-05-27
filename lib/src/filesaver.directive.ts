@@ -30,7 +30,7 @@ export class FileSaverDirective {
   }
 
   @HostListener('click')
-  _click() {
+  _click(): void {
     if (!this.fss.isFileSaverSupported) {
       return;
     }
@@ -66,7 +66,7 @@ export class FileSaverDirective {
     );
   }
 
-  private setDisabled(status: boolean) {
+  setDisabled(status: boolean): void {
     const el = this.el.nativeElement;
     el.disabled = status;
     el.classList[status ? 'add' : 'remove'](`filesaver__disabled`);
