@@ -1,4 +1,3 @@
-// tslint:disable: no-use-before-declare
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, DebugElement, Injector, Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -39,7 +38,7 @@ describe('ngx-filesaveer:', () => {
     httpBed = injector.get(HttpTestingController as Type<HttpTestingController>);
   });
 
-  ['xlsx', 'docx', 'pptx', 'pdf'].forEach(ext => {
+  ['xlsx', 'docx', 'pptx', 'pdf'].forEach((ext) => {
     it(`should be down ${ext}`, () => {
       fixture.detectChanges();
       spyOn(fs, 'saveAs');
@@ -48,7 +47,7 @@ describe('ngx-filesaveer:', () => {
       }
       fixture.detectChanges();
       (dl.query(By.css('#down-' + ext)).nativeElement as HTMLButtonElement).click();
-      const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+      const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
       ret.flush(genFile(ext));
       expect(fs.saveAs).toHaveBeenCalled();
     });
@@ -56,13 +55,13 @@ describe('ngx-filesaveer:', () => {
 
   it('should be using header filename when repseon has [filename]', () => {
     fixture.detectChanges();
-    let fn: string;
+    let fn = '';
     const filename = 'newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake((body: any, fileName: string) => (fn = fileName));
+    spyOn(fs, 'saveAs').and.callFake((_: any, fileName?: string) => (fn = fileName!));
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.flush(genFile('docx'), {
       headers: new HttpHeaders({ filename }),
     });
@@ -71,13 +70,13 @@ describe('ngx-filesaveer:', () => {
 
   it('should be using header filename when repseon has [x-filename]', () => {
     fixture.detectChanges();
-    let fn: string;
+    let fn = '';
     const filename = 'x-newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake((body: any, fileName: string) => (fn = fileName));
+    spyOn(fs, 'saveAs').and.callFake((_: any, fileName?: string) => (fn = fileName!));
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.flush(genFile('docx'), {
       headers: new HttpHeaders({ 'x-filename': filename }),
     });
@@ -89,8 +88,8 @@ describe('ngx-filesaveer:', () => {
     spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
-    ret.error(null, { status: 404 });
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
+    ret.error(null!, { status: 404 });
     expect(context.error).toHaveBeenCalled();
   });
 
@@ -99,7 +98,7 @@ describe('ngx-filesaveer:', () => {
     spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.flush(genFile('docx', false));
     expect(context.error).toHaveBeenCalled();
   });
@@ -111,7 +110,7 @@ describe('ngx-filesaveer:', () => {
     expect(context.error).not.toHaveBeenCalled();
     expect(fs.saveAs).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne(req => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
     ret.flush(null, { status: 201, statusText: '201' });
     expect(fs.saveAs).not.toHaveBeenCalled();
     expect(context.error).toHaveBeenCalled();
@@ -156,12 +155,12 @@ describe('ngx-filesaveer:', () => {
 class TestComponent {
   fileTypes = ['xlsx', 'docx', 'pptx', 'pdf'];
 
-  data = {
+  data: any = {
     otherdata: 1,
     time: new Date(),
   };
 
-  fileName = 'demo中文';
+  fileName: string | null = 'demo中文';
 
   success() {}
 

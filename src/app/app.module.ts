@@ -11,14 +11,8 @@ import { DemoComponent } from './components/demo.component';
 
 @NgModule({
   declarations: [AppComponent, DemoComponent],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    FileSaverModule,
-    CommonModule,
-  ],
+  imports: [BrowserModule, HttpClientModule, FormsModule, FileSaverModule, CommonModule],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class FileSaverDemoModule {}
+export class AppDemoModule {}

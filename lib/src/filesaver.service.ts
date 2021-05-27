@@ -29,7 +29,7 @@ export class FileSaverService {
     }
   }
 
-  save(blob: Blob, fileName?: string, filtType?: string, option?: FileSaverOptions): void {
+  save(blob: Blob | null, fileName?: string, filtType?: string, option?: FileSaverOptions): void {
     if (!blob) {
       throw new Error('Data argument should be a blob instance');
     }
@@ -40,6 +40,6 @@ export class FileSaverService {
 
   saveText(txt: string, fileName?: string, option?: FileSaverOptions): void {
     const blob = new Blob([txt]);
-    this.save(blob, fileName, null, option);
+    this.save(blob, fileName, undefined, option);
   }
 }

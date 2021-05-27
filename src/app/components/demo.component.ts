@@ -10,29 +10,28 @@ import { FileSaverOptions } from 'file-saver';
 })
 export class DemoComponent {
   text = `{ "text": "This is text file!中文" }`;
-  fileName: string;
+  fileName?: string;
   options: FileSaverOptions = {
     autoBom: false,
   };
 
-  constructor(
-    private httpClient: HttpClient,
-    private fileSaverService: FileSaverService,
-  ) {}
+  constructor(private httpClient: HttpClient, private fileSaverService: FileSaverService) {}
 
   onDown(type: string, fromRemote: boolean) {
     const fileName = `save.${type}`;
     if (fromRemote) {
-      this.httpClient.get(`assets/files/demo.${type}`, {
-        observe: 'response',
-        responseType: 'blob'
-      }).subscribe(res => {
-        this.fileSaverService.save(res.body, fileName);
-      });
+      this.httpClient
+        .get(`assets/files/demo.${type}`, {
+          observe: 'response',
+          responseType: 'blob',
+        })
+        .subscribe((res) => {
+          this.fileSaverService.save(res.body, fileName);
+        });
       return;
     }
     const fileType = this.fileSaverService.genType(fileName);
     const txtBlob = new Blob([this.text], { type: fileType });
-    this.fileSaverService.save(txtBlob, fileName, null, this.options);
+    this.fileSaverService.save(txtBlob, fileName, undefined, this.options);
   }
 }
