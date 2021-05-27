@@ -1,4 +1,3 @@
-// tslint:disable: no-use-before-declare deprecation
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, DebugElement, Injector, Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -56,9 +55,9 @@ describe('ngx-filesaveer:', () => {
 
   it('should be using header filename when repseon has [filename]', () => {
     fixture.detectChanges();
-    let fn: string;
+    let fn = '';
     const filename = 'newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake((body: any, fileName: string) => (fn = fileName));
+    spyOn(fs, 'saveAs').and.callFake((_: any, fileName?: string) => (fn = fileName!));
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
@@ -71,9 +70,9 @@ describe('ngx-filesaveer:', () => {
 
   it('should be using header filename when repseon has [x-filename]', () => {
     fixture.detectChanges();
-    let fn: string;
+    let fn = '';
     const filename = 'x-newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake((body: any, fileName: string) => (fn = fileName));
+    spyOn(fs, 'saveAs').and.callFake((_: any, fileName?: string) => (fn = fileName!));
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
@@ -90,7 +89,7 @@ describe('ngx-filesaveer:', () => {
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
     const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
-    ret.error(null, { status: 404 });
+    ret.error(null!, { status: 404 });
     expect(context.error).toHaveBeenCalled();
   });
 
@@ -156,12 +155,12 @@ describe('ngx-filesaveer:', () => {
 class TestComponent {
   fileTypes = ['xlsx', 'docx', 'pptx', 'pdf'];
 
-  data = {
+  data: any = {
     otherdata: 1,
     time: new Date(),
   };
 
-  fileName = 'demo中文';
+  fileName: string | null = 'demo中文';
 
   success(): void {}
 

@@ -1,12 +1,12 @@
-import './polyfills.ts';
-
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
 import { environment } from './environments/environment';
-import { FileSaverDemoModule } from './app/app.module';
+import { AppDemoModule } from './app/app.module';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(FileSaverDemoModule);
+platformBrowserDynamic()
+  .bootstrapModule(AppDemoModule)
+  .catch((err) => console.error(err));

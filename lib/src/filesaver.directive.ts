@@ -10,12 +10,12 @@ import { FileSaverService } from './filesaver.service';
 })
 export class FileSaverDirective {
   @Input() method = 'GET';
-  @Input() http: Observable<HttpResponse<Blob>>;
+  @Input() http?: Observable<HttpResponse<Blob>>;
   @Input() query: any;
   @Input() header: any;
-  @Input() url: string;
-  @Input() fileName: string;
-  @Input() fsOptions: FileSaverOptions;
+  @Input() url!: string;
+  @Input() fileName?: string;
+  @Input() fsOptions?: FileSaverOptions;
   @Output() readonly success = new EventEmitter<HttpResponse<Blob>>();
   @Output() readonly error = new EventEmitter<any>();
 
@@ -25,8 +25,8 @@ export class FileSaverDirective {
     }
   }
 
-  private getName(res: HttpResponse<Blob>): string {
-    return decodeURI(this.fileName || res.headers.get('filename') || res.headers.get('x-filename'));
+  private getName(res: HttpResponse<Blob>) {
+    return decodeURI(this.fileName || res.headers.get('filename') || res.headers.get('x-filename') || '');
   }
 
   @HostListener('click')
@@ -54,11 +54,11 @@ export class FileSaverDirective {
     this.setDisabled(true);
     req.subscribe(
       (res) => {
-        if (res.status !== 200 || res.body.size <= 0) {
+        if (res.status !== 200 || res.body!.size <= 0) {
           this.error.emit(res);
           return;
         }
-        this.fss.save(res.body, this.getName(res), null, this.fsOptions);
+        this.fss.save(res.body, this.getName(res), undefined, this.fsOptions);
         this.success.emit(res);
       },
       (err) => this.error.emit(err),
