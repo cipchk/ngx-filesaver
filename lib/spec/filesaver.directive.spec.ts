@@ -57,7 +57,9 @@ describe('ngx-filesaveer:', () => {
     fixture.detectChanges();
     let fn = '';
     const filename = 'newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake((_: any, fileName?: string) => (fn = fileName!));
+    spyOn(fs, 'saveAs').and.callFake(((_: Blob | string, filename?: string, __?: boolean) => {
+      fn = filename!;
+    }) as any);
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
@@ -72,7 +74,9 @@ describe('ngx-filesaveer:', () => {
     fixture.detectChanges();
     let fn = '';
     const filename = 'x-newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake((_: any, fileName?: string) => (fn = fileName!));
+    spyOn(fs, 'saveAs').and.callFake(((_: Blob | string, filename?: string, __?: boolean) => {
+      fn = filename!;
+    }) as any);
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
