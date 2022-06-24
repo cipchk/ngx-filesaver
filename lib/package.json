@@ -8,7 +8,8 @@
     "FileSaver.js",
     "ngx-filesaver",
     "angular filesaver",
-    "ng filesaver"
+    "ng filesaver",
+    "angular standalone library"
   ],
   "author": "cipchk <cipchk>",
   "license": "MIT",
