@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FileSaverDirective } from './filesaver.directive';
 
 @NgModule({
-  declarations: [FileSaverDirective],
+  imports: [FileSaverDirective],
   exports: [FileSaverDirective],
 })
 export class FileSaverModule {}
