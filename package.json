@@ -1,6 +1,6 @@
 {
   "name": "ngx-filesaver",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "description": "Simple file save with FileSaver.js",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/cipchk/ngx-filesaver#readme",
   "scripts": {
     "analyze": "ng b --stats-json --source-map",
-    "lint": "ng l",
+    "lint": "ng lint",
     "test": "ng t --no-progress --browsers=ChromeHeadlessCI --code-coverage --no-watch",
     "build": "node scripts/build.js",
     "release:next": "npm run build && cd publish && npm publish --access public --tag next",
