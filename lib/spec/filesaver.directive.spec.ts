@@ -3,7 +3,7 @@ import { Component, DebugElement, Injector, Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as fs from 'file-saver';
+import * as fs from 'file-saver-es';
 
 import { FileSaverModule } from '../src/filesaver.module';
 import { FileSaverDirective } from '../src/filesaver.directive';
