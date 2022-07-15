@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Input, HostListener, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { FileSaverOptions } from 'file-saver';
+import { FileSaverOptions } from 'file-saver-es';
 import { FileSaverService } from './filesaver.service';
 
 @Directive({
