@@ -14,17 +14,23 @@ Simple file save with FileSaver.js
 
 ## Installation
 
-```
-npm install file-saver ngx-filesaver --save
+```sh
+$ npm install file-saver ngx-filesaver
+# Or when using yarn
+$ yarn add file-saver ngx-filesaver
+# Or when using pnpm
+$ pnpm install file-saver ngx-filesaver
 ```
 
 Add the `FileSaverModule` module to your project：
 
-```
+```ts
 import { FileSaverModule } from 'ngx-filesaver';
+
 @NgModule({
-  imports: [ FileSaverModule ]
+  imports: [FileSaverModule],
 })
+export class AppModule {}
 ```
 
 ## Instructions
@@ -51,37 +57,39 @@ onSave() {
 #### Configuration example
 
 ```html
-<button type="button"
-        fileSaver
-        [method]="'GET'"
-        [fileName]="'中文pdf.pdf'"
-        [url]="'assets/files/demo.pdf'"
-        [header]="{ token: 'demo' }"
-        [query]="{ pi: 1, name: 'demo' }"
-        (success)="onSuc($event)"
-        (error)="onErr($event)">Download PDF</button>
+<button
+  type="button"
+  fileSaver
+  [method]="'GET'"
+  [fileName]="'中文pdf.pdf'"
+  [url]="'assets/files/demo.pdf'"
+  [header]="{ token: 'demo' }"
+  [query]="{ pi: 1, name: 'demo' }"
+  (success)="onSuc($event)"
+  (error)="onErr($event)"
+>
+  Download PDF
+</button>
 ```
 
 **fileSaver**： the directive name
 **Parameters**
 
-Parameter | Description | Type | Default
-----|------|-----|------
-`method` | Request method type | `string` | `GET`
-`url` | Request URL | `string` | -
-`fileName` | Filename when downloading | `string` | -
-`query` | Additional query parameters. Equivalent to `params` value | `string` | -
-`header` | Header configuration. Usually used for especifying access tokens | `any` | -
-`fsOptions` | FileSaver.js config, can be set `autoBom` value | `FileSaverOptions` | -
-`success` | Download success callback | `EventEmitter<HttpResponse<Blob>>` | -
-`error` | Download error callback | `EventEmitter<any>` | -
+| Parameter   | Description                                                      | Type                               | Default |
+| ----------- | ---------------------------------------------------------------- | ---------------------------------- | ------- |
+| `method`    | Request method type                                              | `string`                           | `GET`   |
+| `url`       | Request URL                                                      | `string`                           | -       |
+| `fileName`  | Filename when downloading                                        | `string`                           | -       |
+| `query`     | Additional query parameters. Equivalent to `params` value        | `string`                           | -       |
+| `header`    | Header configuration. Usually used for especifying access tokens | `any`                              | -       |
+| `fsOptions` | FileSaver.js config, can be set `autoBom` value                  | `FileSaverOptions`                 | -       |
+| `success`   | Download success callback                                        | `EventEmitter<HttpResponse<Blob>>` | -       |
+| `error`     | Download error callback                                          | `EventEmitter<any>`                | -       |
 
 #### Custom HTTP type
 
 ```html
-<button type="button"
-        fileSaver
-        [http]="onRemote('pdf', true)">Download PDF</button>
+<button type="button" fileSaver [http]="onRemote('pdf', true)">Download PDF</button>
 ```
 
 ```ts
@@ -107,10 +115,10 @@ If you are requesting a CORS address, you need to pay attention to the request h
 
 #### Class Name
 
-| Class Name | Description |
-| --- | ---- |
+| Class Name               | Description                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------- |
 | `filesaver__not-support` | Not [Supported Browsers](https://github.com/eligrey/FileSaver.js/#supported-browsers) |
-| `filesaver__disabled` | During http request |
+| `filesaver__disabled`    | During http request                                                                   |
 
 #### Configuring CommonJS dependencies
 

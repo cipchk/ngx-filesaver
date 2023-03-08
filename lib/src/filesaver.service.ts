@@ -1,21 +1,25 @@
 import { Injectable } from '@angular/core';
 import { saveAs, FileSaverOptions } from 'file-saver';
 
+/** Check the `Blob` existance only once. */
+let isFileSaverSupported: boolean;
+try {
+  isFileSaverSupported = !!new Blob();
+} catch {
+  isFileSaverSupported = false;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FileSaverService {
   get isFileSaverSupported(): boolean {
-    try {
-      return !!new Blob();
-    } catch (e) {
-      return false;
-    }
+    return isFileSaverSupported;
   }
 
   genType(fileName?: string): string {
     if (!fileName || fileName.lastIndexOf('.') === -1) {
       return 'text/plain';
     }
-    const type = fileName.substr(fileName.lastIndexOf('.') + 1);
+    const type = fileName.substring(fileName.lastIndexOf('.') + 1);
     switch (type) {
       case 'txt':
         return 'text/plain';

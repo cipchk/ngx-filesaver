@@ -1,8 +1,8 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { Component, DebugElement, Injector, Type } from '@angular/core';
+import { ApplicationRef, Component, DebugElement, Injector } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpHeaders } from '@angular/common/http';
 import * as fs from 'file-saver';
 
 import { FileSaverModule } from '../src/filesaver.module';
@@ -16,12 +16,11 @@ function genFile(ext: string, isRealFile = true): Blob {
   return blob;
 }
 
-describe('ngx-filesaveer:', () => {
+describe('ngx-filesaver:', () => {
   let fixture: ComponentFixture<TestComponent>;
   let dl: DebugElement;
   let context: TestComponent;
   let injector: Injector;
-  let http: HttpClient;
   let httpBed: HttpTestingController;
 
   beforeEach(() => {
@@ -34,8 +33,7 @@ describe('ngx-filesaveer:', () => {
     dl = fixture.debugElement;
     context = fixture.componentInstance;
 
-    http = injector.get(HttpClient);
-    httpBed = injector.get(HttpTestingController as Type<HttpTestingController>);
+    httpBed = injector.get(HttpTestingController);
   });
 
   ['xlsx', 'docx', 'pptx', 'pdf'].forEach((ext) => {
@@ -47,7 +45,7 @@ describe('ngx-filesaveer:', () => {
       }
       fixture.detectChanges();
       (dl.query(By.css('#down-' + ext)).nativeElement as HTMLButtonElement).click();
-      const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
+      const ret = httpBed.expectOne((req) => req.url.startsWith('/'));
       ret.flush(genFile(ext));
       expect(fs.saveAs).toHaveBeenCalled();
     });
@@ -63,7 +61,7 @@ describe('ngx-filesaveer:', () => {
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/'));
     ret.flush(genFile('docx'), {
       headers: new HttpHeaders({ filename }),
     });
@@ -80,7 +78,7 @@ describe('ngx-filesaveer:', () => {
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/'));
     ret.flush(genFile('docx'), {
       headers: new HttpHeaders({ 'x-filename': filename }),
     });
@@ -92,7 +90,7 @@ describe('ngx-filesaveer:', () => {
     spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/'));
     ret.error(null!, { status: 404 });
     expect(context.error).toHaveBeenCalled();
   });
@@ -102,7 +100,7 @@ describe('ngx-filesaveer:', () => {
     spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/'));
     ret.flush(genFile('docx', false));
     expect(context.error).toHaveBeenCalled();
   });
@@ -114,7 +112,7 @@ describe('ngx-filesaveer:', () => {
     expect(context.error).not.toHaveBeenCalled();
     expect(fs.saveAs).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
-    const ret = httpBed.expectOne((req) => req.url.startsWith('/')) as TestRequest;
+    const ret = httpBed.expectOne((req) => req.url.startsWith('/'));
     ret.flush(null, { status: 201, statusText: '201' });
     expect(fs.saveAs).not.toHaveBeenCalled();
     expect(context.error).toHaveBeenCalled();
@@ -122,7 +120,6 @@ describe('ngx-filesaveer:', () => {
 
   it('should be disabled when http request ing', () => {
     fixture.detectChanges();
-    // tslint:disable-next-line: no-string-literal
     dl.query(By.css('button')).injector.get(FileSaverDirective).setDisabled(true);
     const el = dl.query(By.css('#down-xlsx')).nativeElement as HTMLButtonElement;
     expect(el.classList).toContain(`filesaver__disabled`);
@@ -135,6 +132,35 @@ describe('ngx-filesaveer:', () => {
     fixture.detectChanges();
     const el = dl.query(By.css('#down-xlsx')).nativeElement as HTMLButtonElement;
     expect(el.classList).toContain(`filesaver__not-support`);
+  });
+});
+
+describe('change detection', () => {
+  let fixture: ComponentFixture<TestNoListenersComponent>;
+  let dl: DebugElement;
+  let injector: Injector;
+  let httpBed: HttpTestingController;
+
+  beforeEach(() => {
+    injector = TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, FileSaverModule],
+      declarations: [TestNoListenersComponent],
+    });
+
+    fixture = TestBed.createComponent(TestNoListenersComponent);
+    dl = fixture.debugElement;
+
+    httpBed = injector.get(HttpTestingController);
+  });
+
+  it('should not run change detection at all when has no listeners', () => {
+    fixture.detectChanges();
+    const appRef = TestBed.inject(ApplicationRef);
+    spyOn(appRef, 'tick');
+    dl.query(By.css('#down-xlsx')).nativeElement.dispatchEvent(new Event('click'));
+    const req = httpBed.expectOne((req) => req.url.startsWith('/'));
+    req.flush(genFile('xlsx'));
+    expect(appRef.tick).toHaveBeenCalledTimes(0);
   });
 });
 
@@ -169,4 +195,11 @@ class TestComponent {
   success(): void {}
 
   error(): void {}
+}
+
+@Component({
+  template: '<button id="down-xlsx" fileSaver query="data" method="get" url="/demo.xlsx" [fileName]="fileName">xlsx</button>',
+})
+class TestNoListenersComponent {
+  fileName = 'demo中文';
 }
