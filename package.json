@@ -1,6 +1,6 @@
 {
   "name": "ngx-filesaver",
-  "version": "15.0.0",
+  "version": "15.0.1",
   "description": "Simple file save with FileSaver.js",
   "repository": {
     "type": "git",
