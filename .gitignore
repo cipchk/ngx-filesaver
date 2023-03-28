@@ -5,7 +5,7 @@
 /tmp
 /out-tsc
 /publish
-/yarn.lock
+/package-lock.json
 /.angular/cache
 
 # dependencies
