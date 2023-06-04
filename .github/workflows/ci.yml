@@ -46,7 +46,7 @@ jobs:
 
       - name: run
         run: |
-          yarn run lint
+          ng lint
 
   site:
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
 
       - name: build
         run: |
-          node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build --base-href /ngx-filesaver/
+          ng build --base-href /ngx-filesaver/
           cp ./dist/index.html ./dist/404.html
           ls ./dist
 

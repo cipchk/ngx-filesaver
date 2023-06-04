@@ -1,8 +1,7 @@
-import { Directive, ElementRef, Input, EventEmitter, Output, NgZone, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, EventEmitter, Output, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-import { filter, fromEvent, Observable, Subject } from 'rxjs';
+import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { FileSaverOptions } from 'file-saver';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FileSaverService } from './filesaver.service';
 
 @Directive({
@@ -10,7 +9,7 @@ import { FileSaverService } from './filesaver.service';
   exportAs: 'fileSaver',
   standalone: true,
 })
-export class FileSaverDirective implements OnInit {
+export class FileSaverDirective implements OnInit, OnDestroy {
   @Input() method = 'GET';
   @Input() http?: Observable<HttpResponse<Blob>>;
   @Input() query: any;
@@ -20,6 +19,8 @@ export class FileSaverDirective implements OnInit {
   @Input() fsOptions?: FileSaverOptions;
   @Output() readonly success = new EventEmitter<HttpResponse<Blob>>();
   @Output() readonly error = new EventEmitter<any>();
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private ngZone: NgZone,
@@ -36,6 +37,10 @@ export class FileSaverDirective implements OnInit {
     this.ngZone.runOutsideAngular(() => this.setupClickListener());
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+  }
+
   private getName(res: HttpResponse<Blob>) {
     return decodeURI(this.fileName || res.headers.get('filename') || res.headers.get('x-filename') || '');
   }
@@ -50,7 +55,7 @@ export class FileSaverDirective implements OnInit {
     fromEvent(this.el.nativeElement, 'click')
       .pipe(
         filter(() => this.fss.isFileSaverSupported),
-        takeUntilDestroyed(),
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         let req = this.http;
@@ -72,7 +77,7 @@ export class FileSaverDirective implements OnInit {
 
         this.setDisabled(true);
 
-        req.pipe(takeUntilDestroyed()).subscribe({
+        req.pipe(takeUntil(this.destroy$)).subscribe({
           next: (response) => {
             if (response.status !== 200 || response.body!.size <= 0) {
               this.emitIfHasObservers(this.error, response);
