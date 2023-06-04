@@ -46,7 +46,7 @@ jobs:
 
       - name: run
         run: |
-          yarn run lint
+          ./node_modules/@angular/cli/bin/ng lint
 
   site:
     runs-on: ubuntu-latest
