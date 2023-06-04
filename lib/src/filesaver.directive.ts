@@ -14,7 +14,7 @@ export class FileSaverDirective implements OnInit, OnDestroy {
   @Input() http?: Observable<HttpResponse<Blob>>;
   @Input() query: any;
   @Input() header: any;
-  @Input() url!: string;
+  @Input({ required: true }) url!: string;
   @Input() fileName?: string;
   @Input() fsOptions?: FileSaverOptions;
   @Output() readonly success = new EventEmitter<HttpResponse<Blob>>();

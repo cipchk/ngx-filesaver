@@ -110,7 +110,6 @@
       }
     }
   },
-  "defaultProject": "ngx-filesaver",
   "cli": {
     "schematicCollections": [
       "@angular-eslint/schematics"
