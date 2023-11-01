@@ -10,7 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "tsconfig.json"
+          "tsconfig.json",
+          "e2e/tsconfig.json"
         ],
         "createDefaultProgram": true
       },
@@ -36,9 +37,6 @@
           }
         ],
         "@angular-eslint/no-host-metadata-property": [
-          "off"
-        ],
-        "@angular-eslint/no-output-native": [
           "off"
         ]
       }

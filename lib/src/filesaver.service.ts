@@ -15,7 +15,7 @@ export class FileSaverService {
     return isFileSaverSupported;
   }
 
-  genType(fileName?: string): string {
+  genType(fileName?: string | null): string {
     if (!fileName || fileName.lastIndexOf('.') === -1) {
       return 'text/plain';
     }
