@@ -28,11 +28,13 @@ jobs:
           cmd: install
 
       - name: run
-        run: |
-          yarn run test
-          cat ./coverage/lcov.info | ./node_modules/.bin/codecov
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: yarn run test
+
+      - uses: codecov/codecov-action@v3
+        name: Upload
+        with:
+          directory: ./coverage/ngx-filesaver
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   lint:
     runs-on: ubuntu-latest
