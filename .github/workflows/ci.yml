@@ -34,9 +34,11 @@ jobs:
       - uses: codecov/codecov-action@v3
         name: upload
         with:
-          directory: ./coverage/ngx-filesaver
-          files: ./*.html
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          files: ./coverage/cobertura-coverage.xml
+          fail_ci_if_error: true
+          verbose: true
 
   lint:
     runs-on: ubuntu-latest
