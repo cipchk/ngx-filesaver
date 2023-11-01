@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@master
 
       - uses: borales/actions-yarn@v4
+        name: install
         with:
           cmd: install
 
@@ -31,9 +32,10 @@ jobs:
         run: yarn run test
 
       - uses: codecov/codecov-action@v3
-        name: Upload
+        name: upload
         with:
           directory: ./coverage/ngx-filesaver
+          files: ./*.html
           token: ${{ secrets.CODECOV_TOKEN }}
 
   lint:
