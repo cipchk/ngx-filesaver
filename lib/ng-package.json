@@ -3,6 +3,6 @@
   "dest": "../publish",
   "deleteDestPath": true,
   "lib": {
-    "entryFile": "index.ts"
+    "entryFile": "public-api.ts"
   }
 }
