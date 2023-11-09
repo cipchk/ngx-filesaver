@@ -57,10 +57,10 @@ make.js
 protractor.conf.js
 test-main.js
 tsconfig.json
+tslint.json
 typedoc.json
 typings.json
 webpack.config.js
 *.yml
 .jshintrc
 .editorconfig
-yarn.lock

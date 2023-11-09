@@ -4,6 +4,7 @@ Simple file save with FileSaver.js
 
 [![NPM version](https://img.shields.io/npm/v/ngx-filesaver.svg)](https://www.npmjs.com/package/ngx-filesaver)
 [![Ci](https://github.com/cipchk/ngx-filesaver/workflows/Ci/badge.svg)](https://github.com/cipchk/ngx-filesaver/actions?query=workflow%3ACi)
+[![codecov](https://codecov.io/gh/cipchk/ngx-filesaver/graph/badge.svg?token=vnk2alNB8D)](https://codecov.io/gh/cipchk/ngx-filesaver)
 
 [中文版](README.zh-CN.md)
 

@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-output-native */
 import { Directive, ElementRef, Input, EventEmitter, Output, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
