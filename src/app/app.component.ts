@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FileSaverOptions } from 'file-saver';
@@ -38,7 +38,7 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
   `,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule, FileSaverDirective],
+  imports: [CommonModule,  FormsModule, FileSaverDirective],
 })
 export class AppComponent {
   text = `{ "text": "This is text file!中文" }`;
@@ -53,7 +53,7 @@ export class AppComponent {
     const fileName = `save.${type}`;
     if (fromRemote) {
       this.httpClient
-        .get(`assets/files/demo.${type}`, {
+        .get(`files/demo.${type}`, {
           observe: 'response',
           responseType: 'blob',
         })
