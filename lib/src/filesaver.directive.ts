@@ -1,25 +1,27 @@
 /* eslint-disable @angular-eslint/no-output-native */
-import { Directive, ElementRef, Input, EventEmitter, Output, NgZone, OnInit, inject, DestroyRef } from '@angular/core';
+import { Directive, ElementRef, NgZone, OnInit, inject, DestroyRef, input } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { filter, fromEvent, Observable, Subject } from 'rxjs';
 import { FileSaverOptions } from 'file-saver';
 import { FileSaverService } from './filesaver.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
   selector: '[fileSaver]',
   exportAs: 'fileSaver',
 })
 export class FileSaverDirective implements OnInit {
-  @Input() method = 'GET';
-  @Input() http?: Observable<HttpResponse<Blob>>;
-  @Input() query: any;
-  @Input() header: any;
-  @Input({ required: true }) url!: string;
-  @Input() fileName?: string;
-  @Input() fsOptions?: FileSaverOptions;
-  @Output() readonly success = new EventEmitter<HttpResponse<Blob>>();
-  @Output() readonly error = new EventEmitter<any>();
+  readonly method = input('GET');
+  readonly http = input<Observable<HttpResponse<Blob>>>();
+  readonly query = input<any>();
+  readonly header = input<any>();
+  readonly url = input.required<string>();
+  readonly fileName = input<string>();
+  readonly fsOptions = input<FileSaverOptions>();
+  private successEmitter = new Subject<HttpResponse<Blob>>();
+  readonly success = outputFromObservable(this.successEmitter);
+  private errorEmitter = new Subject<any>();
+  readonly error = outputFromObservable(this.errorEmitter);
 
   private readonly d$ = inject(DestroyRef);
 
@@ -39,7 +41,7 @@ export class FileSaverDirective implements OnInit {
   }
 
   private getName(res: HttpResponse<Blob>) {
-    return decodeURI(this.fileName || res.headers.get('filename') || res.headers.get('x-filename') || '');
+    return decodeURI(this.fileName() || res.headers.get('filename') || res.headers.get('x-filename') || '');
   }
 
   setDisabled(status: boolean): void {
@@ -55,19 +57,19 @@ export class FileSaverDirective implements OnInit {
         takeUntilDestroyed(this.d$),
       )
       .subscribe(() => {
-        let req = this.http;
+        let req = this.http();
 
         if (!req) {
           let params = new HttpParams();
-          const query = this.query || {};
+          const query = this.query() || {};
           for (const item in query) {
             params = params.set(item, query[item]);
           }
 
-          req = this.httpClient.request(this.method, this.url, {
+          req = this.httpClient.request(this.method(), this.url(), {
             observe: 'response',
             responseType: 'blob',
-            headers: this.header,
+            headers: this.header(),
             params,
           });
         }
@@ -77,29 +79,15 @@ export class FileSaverDirective implements OnInit {
         req.pipe(takeUntilDestroyed(this.d$)).subscribe({
           next: (response) => {
             if (response.status !== 200 || response.body!.size <= 0) {
-              this.emitIfHasObservers(this.error, response);
+              this.errorEmitter.next(response);
               return;
             }
-            this.fss.save(response.body, this.getName(response), undefined, this.fsOptions);
-            this.emitIfHasObservers(this.success, response);
+            this.fss.save(response.body, this.getName(response), undefined, this.fsOptions());
+            this.successEmitter.next(response);
           },
-          error: (error) => this.emitIfHasObservers(this.error, error),
+          error: (error) => this.errorEmitter.next(error),
           complete: () => this.setDisabled(false),
         });
       });
   }
-
-  private emitIfHasObservers<T>(emitter: EventEmitter<T>, value: T): void {
-    if (hasObservers(emitter)) {
-      // Re-enter the Angular zone only if there're any `error` or `success` listeners
-      // on the directive, for instance, `(success)="..."`.
-      this.ngZone.run(() => emitter.emit(value));
-    }
-  }
-}
-
-function hasObservers<T>(subject: Subject<T>): boolean {
-  // Note: The `observed` property is available only in RxJS@7.2.0, which means it's
-  // not available for users running the lower version.
-  return subject.observed ?? subject.observers.length > 0;
 }
