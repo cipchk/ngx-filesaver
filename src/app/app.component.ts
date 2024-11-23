@@ -37,8 +37,7 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
     <button type="button" fileSaver url="assets/files/demo.docx">Save Word</button>
   `,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [CommonModule,  FormsModule, FileSaverDirective],
+  imports: [CommonModule, FormsModule, FileSaverDirective],
 })
 export class AppComponent {
   text = `{ "text": "This is text file!中文" }`;

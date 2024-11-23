@@ -8,7 +8,6 @@ import { FileSaverService } from './filesaver.service';
 @Directive({
   selector: '[fileSaver]',
   exportAs: 'fileSaver',
-  standalone: true,
 })
 export class FileSaverDirective implements OnInit, OnDestroy {
   @Input() method = 'GET';

@@ -1,15 +1,14 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ApplicationRef, Component, DebugElement, Injector } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpHeaders, provideHttpClient } from '@angular/common/http';
 import * as fs from 'file-saver';
 
-import { FileSaverModule } from '../src/filesaver.module';
 import { FileSaverDirective } from '../src/filesaver.directive';
 import { FileSaverService } from '../src/filesaver.service';
 
-function genFile(ext: string, isRealFile = true): Blob {
+function genFile(_: string, isRealFile = true): Blob {
   const blob = new Blob([
     isRealFile ? `iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==` : '',
   ]);
@@ -25,8 +24,8 @@ describe('ngx-filesaver:', () => {
 
   beforeEach(() => {
     injector = TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, FileSaverModule],
-      declarations: [TestComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+      imports: [TestComponent],
     });
 
     fixture = TestBed.createComponent(TestComponent);
@@ -143,8 +142,8 @@ describe('change detection', () => {
 
   beforeEach(() => {
     injector = TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, FileSaverModule],
-      declarations: [TestNoListenersComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+      imports: [TestNoListenersComponent],
     });
 
     fixture = TestBed.createComponent(TestNoListenersComponent);
@@ -166,8 +165,8 @@ describe('change detection', () => {
 
 @Component({
   template: `
+    @for (i of fileTypes; track $index) {
     <button
-      *ngFor="let i of fileTypes"
       id="down-{{ i }}"
       class="mr-sm"
       fileSaver
@@ -180,7 +179,10 @@ describe('change detection', () => {
     >
       {{ i }}
     </button>
+    }
   `,
+  standalone: true,
+  imports: [FileSaverDirective],
 })
 class TestComponent {
   fileTypes = ['xlsx', 'docx', 'pptx', 'pdf'];
@@ -199,6 +201,8 @@ class TestComponent {
 
 @Component({
   template: '<button id="down-xlsx" fileSaver query="data" method="get" url="/demo.xlsx" [fileName]="fileName">xlsx</button>',
+  standalone: true,
+  imports: [FileSaverDirective],
 })
 class TestNoListenersComponent {
   fileName = 'demo中文';
