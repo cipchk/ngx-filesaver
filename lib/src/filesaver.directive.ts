@@ -1,15 +1,16 @@
 /* eslint-disable @angular-eslint/no-output-native */
-import { Directive, ElementRef, Input, EventEmitter, Output, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, EventEmitter, Output, NgZone, OnInit, inject, DestroyRef } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { filter, fromEvent, Observable, Subject } from 'rxjs';
 import { FileSaverOptions } from 'file-saver';
 import { FileSaverService } from './filesaver.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
   selector: '[fileSaver]',
   exportAs: 'fileSaver',
 })
-export class FileSaverDirective implements OnInit, OnDestroy {
+export class FileSaverDirective implements OnInit {
   @Input() method = 'GET';
   @Input() http?: Observable<HttpResponse<Blob>>;
   @Input() query: any;
@@ -20,7 +21,7 @@ export class FileSaverDirective implements OnInit, OnDestroy {
   @Output() readonly success = new EventEmitter<HttpResponse<Blob>>();
   @Output() readonly error = new EventEmitter<any>();
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly d$ = inject(DestroyRef);
 
   constructor(
     private ngZone: NgZone,
@@ -37,10 +38,6 @@ export class FileSaverDirective implements OnInit, OnDestroy {
     this.ngZone.runOutsideAngular(() => this.setupClickListener());
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-  }
-
   private getName(res: HttpResponse<Blob>) {
     return decodeURI(this.fileName || res.headers.get('filename') || res.headers.get('x-filename') || '');
   }
@@ -55,7 +52,7 @@ export class FileSaverDirective implements OnInit, OnDestroy {
     fromEvent(this.el.nativeElement, 'click')
       .pipe(
         filter(() => this.fss.isFileSaverSupported),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this.d$),
       )
       .subscribe(() => {
         let req = this.http;
@@ -77,7 +74,7 @@ export class FileSaverDirective implements OnInit, OnDestroy {
 
         this.setDisabled(true);
 
-        req.pipe(takeUntil(this.destroy$)).subscribe({
+        req.pipe(takeUntilDestroyed(this.d$)).subscribe({
           next: (response) => {
             if (response.status !== 200 || response.body!.size <= 0) {
               this.emitIfHasObservers(this.error, response);
