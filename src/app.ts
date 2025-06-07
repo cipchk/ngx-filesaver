@@ -39,7 +39,7 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, FormsModule, FileSaverDirective],
 })
-export class AppComponent {
+export class App {
   private readonly httpClient = inject(HttpClient);
   private readonly fileSaverService = inject(FileSaverService);
   text = `{ "text": "This is text file!中文" }`;
