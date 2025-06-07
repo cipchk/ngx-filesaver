@@ -34,7 +34,7 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
     <button type="button" (click)="onDown('png', true)">Save Png</button>
 
     <h1>fileSaver Directive</h1>
-    <button type="button" fileSaver url="assets/files/demo.docx">Save Word</button>
+    <button type="button" fileSaver url="files/demo.docx">Save Word</button>
   `,
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, FormsModule, FileSaverDirective],
