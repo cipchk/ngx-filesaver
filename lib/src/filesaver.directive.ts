@@ -1,8 +1,8 @@
-/* eslint-disable @angular-eslint/no-output-native */
+
 import { Directive, ElementRef, NgZone, OnInit, inject, DestroyRef, input } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { filter, fromEvent, Observable, Subject } from 'rxjs';
-import { FileSaverOptions } from 'file-saver';
+import type { FileSaverOptions } from 'file-saver';
 import { FileSaverService } from './filesaver.service';
 import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -11,6 +11,10 @@ import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-int
   exportAs: 'fileSaver',
 })
 export class FileSaverDirective implements OnInit {
+  private readonly ngZone = inject(NgZone);
+  private readonly el = inject<ElementRef<HTMLButtonElement>>(ElementRef);
+  private readonly fss = inject(FileSaverService);
+  private readonly httpClient = inject(HttpClient);
   readonly method = input('GET');
   readonly http = input<Observable<HttpResponse<Blob>>>();
   readonly query = input<any>();
@@ -25,14 +29,9 @@ export class FileSaverDirective implements OnInit {
 
   private readonly d$ = inject(DestroyRef);
 
-  constructor(
-    private ngZone: NgZone,
-    private el: ElementRef<HTMLButtonElement>,
-    private fss: FileSaverService,
-    private httpClient: HttpClient,
-  ) {
-    if (!fss.isFileSaverSupported) {
-      el.nativeElement.classList.add(`filesaver__not-support`);
+  constructor() {
+    if (!this.fss.isFileSaverSupported) {
+      this.el.nativeElement.classList.add(`filesaver__not-support`);
     }
   }
 

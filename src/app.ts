@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FileSaverOptions } from 'file-saver';
 import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
@@ -40,13 +40,13 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
   imports: [CommonModule, FormsModule, FileSaverDirective],
 })
 export class AppComponent {
+  private readonly httpClient = inject(HttpClient);
+  private readonly fileSaverService = inject(FileSaverService);
   text = `{ "text": "This is text file!中文" }`;
   fileName?: string;
   options: FileSaverOptions = {
     autoBom: false,
   };
-
-  constructor(private httpClient: HttpClient, private fileSaverService: FileSaverService) {}
 
   onDown(type: string, fromRemote: boolean) {
     const fileName = `save.${type}`;
