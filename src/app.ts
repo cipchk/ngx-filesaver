@@ -1,6 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FileSaverOptions } from 'file-saver';
 import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
@@ -36,8 +35,7 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
     <h1>fileSaver Directive</h1>
     <button type="button" fileSaver url="files/demo.docx">Save Word</button>
   `,
-  encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, FormsModule, FileSaverDirective],
+  imports: [FormsModule, FileSaverDirective],
 })
 export class App {
   private readonly httpClient = inject(HttpClient);
