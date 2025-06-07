@@ -1,6 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FileSaverOptions } from 'file-saver';
 import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
@@ -34,19 +33,18 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
     <button type="button" (click)="onDown('png', true)">Save Png</button>
 
     <h1>fileSaver Directive</h1>
-    <button type="button" fileSaver url="assets/files/demo.docx">Save Word</button>
+    <button type="button" fileSaver url="files/demo.docx">Save Word</button>
   `,
-  encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, FormsModule, FileSaverDirective],
+  imports: [FormsModule, FileSaverDirective],
 })
-export class AppComponent {
+export class App {
+  private readonly httpClient = inject(HttpClient);
+  private readonly fileSaverService = inject(FileSaverService);
   text = `{ "text": "This is text file!中文" }`;
   fileName?: string;
   options: FileSaverOptions = {
     autoBom: false,
   };
-
-  constructor(private httpClient: HttpClient, private fileSaverService: FileSaverService) {}
 
   onDown(type: string, fromRemote: boolean) {
     const fileName = `save.${type}`;

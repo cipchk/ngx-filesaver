@@ -1,13 +1,12 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "alwaysStrict": true,
-    "inlineSources": true,
-    "strictFunctionTypes": true,
-    "stripInternal": true,
+    "declaration": true,
     "declarationMap": false
   },
-  "include": ["**/*.ts"],
+  "include": [
+    "**/*.ts"
+  ],
   "angularCompilerOptions": {
     "compilationMode": "partial"
   }

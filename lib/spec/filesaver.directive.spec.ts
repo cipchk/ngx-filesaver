@@ -1,9 +1,9 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { ApplicationRef, Component, DebugElement, Injector } from '@angular/core';
+import { ApplicationRef, Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpHeaders, provideHttpClient } from '@angular/common/http';
-import * as fs from 'file-saver';
+import fs from 'file-saver';
 
 import { FileSaverDirective } from '../src/filesaver.directive';
 import { FileSaverService } from '../src/filesaver.service';
@@ -19,11 +19,10 @@ describe('ngx-filesaver:', () => {
   let fixture: ComponentFixture<TestComponent>;
   let dl: DebugElement;
   let context: TestComponent;
-  let injector: Injector;
   let httpBed: HttpTestingController;
 
   beforeEach(() => {
-    injector = TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()],
       imports: [TestComponent],
     });
@@ -32,7 +31,7 @@ describe('ngx-filesaver:', () => {
     dl = fixture.debugElement;
     context = fixture.componentInstance;
 
-    httpBed = injector.get(HttpTestingController);
+    httpBed = TestBed.inject(HttpTestingController);
   });
 
   ['xlsx', 'docx', 'pptx', 'pdf'].forEach((ext) => {
@@ -54,7 +53,7 @@ describe('ngx-filesaver:', () => {
     fixture.detectChanges();
     let fn = '';
     const filename = 'newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake(((_: Blob | string, filename?: string, __?: boolean) => {
+    spyOn(fs, 'saveAs').and.callFake(((_: Blob | string, filename?: string) => {
       fn = filename!;
     }) as any);
     context.fileName = null;
@@ -71,7 +70,7 @@ describe('ngx-filesaver:', () => {
     fixture.detectChanges();
     let fn = '';
     const filename = 'x-newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake(((_: Blob | string, filename?: string, __?: boolean) => {
+    spyOn(fs, 'saveAs').and.callFake(((_: Blob | string, filename?: string) => {
       fn = filename!;
     }) as any);
     context.fileName = null;
@@ -125,7 +124,7 @@ describe('ngx-filesaver:', () => {
   });
 
   it('should be filesaver__not-support when not supoort fileSaver', () => {
-    const srv = injector.get(FileSaverService);
+    const srv = TestBed.inject(FileSaverService);
     spyOnProperty(srv, 'isFileSaverSupported', 'get').and.returnValue(false);
     context.fileTypes = ['xlsx'];
     fixture.detectChanges();
@@ -137,11 +136,10 @@ describe('ngx-filesaver:', () => {
 describe('change detection', () => {
   let fixture: ComponentFixture<TestNoListenersComponent>;
   let dl: DebugElement;
-  let injector: Injector;
   let httpBed: HttpTestingController;
 
   beforeEach(() => {
-    injector = TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()],
       imports: [TestNoListenersComponent],
     });
@@ -149,7 +147,7 @@ describe('change detection', () => {
     fixture = TestBed.createComponent(TestNoListenersComponent);
     dl = fixture.debugElement;
 
-    httpBed = injector.get(HttpTestingController);
+    httpBed = TestBed.inject(HttpTestingController);
   });
 
   it('should not run change detection at all when has no listeners', () => {
@@ -194,9 +192,9 @@ class TestComponent {
 
   fileName: string | null = 'demo中文';
 
-  success(): void {}
+  success(): void { }
 
-  error(): void {}
+  error(): void { }
 }
 
 @Component({

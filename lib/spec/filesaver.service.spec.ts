@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import * as fs from 'file-saver';
+import fs from 'file-saver';
 import { FileSaverService } from '../src/filesaver.service';
 
 describe('ngx-filesaver:', () => {
