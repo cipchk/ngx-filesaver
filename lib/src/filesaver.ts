@@ -1,7 +1,7 @@
 
-import { Directive, ElementRef, inject, DestroyRef, input } from '@angular/core';
+import { Directive, ElementRef, inject, input } from '@angular/core';
 import { HttpClient, type HttpHeaders, type HttpParams, type HttpResponse } from '@angular/common/http';
-import { filter, fromEvent, type Observable, Subject } from 'rxjs';
+import { filter, fromEvent, type Observable, Subject, switchMap } from 'rxjs';
 import type { FileSaverOptions } from 'file-saver';
 import { FileSaverService } from './service';
 import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -26,8 +26,6 @@ export class FileSaverDirective {
   private errorEmitter = new Subject<any>();
   readonly error = outputFromObservable(this.errorEmitter);
 
-  private readonly d$ = inject(DestroyRef);
-
   constructor() {
     if (!this.fss.isFileSaverSupported) {
       this.el.nativeElement.classList.add(`filesaver__not-support`);
@@ -49,34 +47,34 @@ export class FileSaverDirective {
     fromEvent(this.el.nativeElement, 'click')
       .pipe(
         filter(() => this.fss.isFileSaverSupported),
+        switchMap(() => {
+          let req = this.http();
+
+          if (!req) {
+            req = this.httpClient.request(this.method(), this.url(), {
+              observe: 'response',
+              responseType: 'blob',
+              headers: this.header(),
+              params: this.query(),
+            });
+          }
+
+          this.setDisabled(true);
+          return req;
+        }),
         takeUntilDestroyed(),
       )
-      .subscribe(() => {
-        let req = this.http();
-
-        if (!req) {
-          req = this.httpClient.request(this.method(), this.url(), {
-            observe: 'response',
-            responseType: 'blob',
-            headers: this.header(),
-            params: this.query(),
-          });
-        }
-
-        this.setDisabled(true);
-
-        req.pipe(takeUntilDestroyed(this.d$)).subscribe({
-          next: (response) => {
-            if (response.status !== 200 || response.body!.size <= 0) {
-              this.errorEmitter.next(response);
-              return;
-            }
-            this.fss.save(response.body, this.getName(response), undefined, this.fsOptions());
-            this.successEmitter.next(response);
-          },
-          error: (error) => this.errorEmitter.next(error),
-          complete: () => this.setDisabled(false),
-        });
+      .subscribe({
+        next: (response) => {
+          if (response.status !== 200 || response.body!.size <= 0) {
+            this.errorEmitter.next(response);
+            return;
+          }
+          this.fss.save(response.body, this.getName(response), undefined, this.fsOptions());
+          this.successEmitter.next(response);
+        },
+        error: (error) => this.errorEmitter.next(error),
+        complete: () => this.setDisabled(false),
       });
   }
 }
