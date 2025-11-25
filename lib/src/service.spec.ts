@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import fs from 'file-saver';
-import { FileSaverService } from '../src/filesaver.service';
+import { FileSaverService } from './service';
 
 describe('ngx-filesaver:', () => {
   let srv: FileSaverService;
@@ -29,15 +29,15 @@ describe('ngx-filesaver:', () => {
 
     it('should be use default filename: download', () => {
       const blob = new Blob();
-      const spy = spyOn(fs, 'saveAs');
+      const spy = vi.spyOn(fs, 'saveAs').mockClear();
       srv.save(blob);
-      expect(spy.calls.first().args[1] as string).toBe('download');
+      expect(spy.mock.calls[0][1] as string).toBe('download');
     });
   });
 
   it('#saveText', () => {
-    const spy = spyOn(fs, 'saveAs');
+    const spy = vi.spyOn(fs, 'saveAs').mockClear();
     srv.saveText('a');
-    expect((spy.calls.first().args[0] as Blob).size).toBe(1);
+    expect((spy.mock.calls[0][0] as Blob).size).toBe(1);
   });
 });

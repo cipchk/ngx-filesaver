@@ -13,7 +13,7 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
       <a href="https://github.com/cipchk/ngx-filesaver/blob/master/README.md" target="_blank">README.md</a>
     </p>
     <h1>Filesaver option</h1>
-    <label> <input type="checkbox" [(ngModel)]="options.autoBom" /> AutoBOM </label>
+    <label><input type="checkbox" [(ngModel)]="options.autoBom" /> AutoBOM</label>
 
     <h1>Text Document</h1>
     <textarea [(ngModel)]="text"></textarea>
@@ -40,13 +40,13 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
 export class App {
   private readonly httpClient = inject(HttpClient);
   private readonly fileSaverService = inject(FileSaverService);
-  text = `{ "text": "This is text file!中文" }`;
-  fileName?: string;
-  options: FileSaverOptions = {
+  protected text = `{ "text": "This is text file!中文" }`;
+  protected fileName?: string;
+  protected options: FileSaverOptions = {
     autoBom: false,
   };
 
-  onDown(type: string, fromRemote: boolean) {
+  protected onDown(type: string, fromRemote: boolean) {
     const fileName = `save.${type}`;
     if (fromRemote) {
       this.httpClient
