@@ -38,8 +38,8 @@ export class FileSaverService {
       throw new Error('Data argument should be a blob instance');
     }
 
-    const file = new Blob([blob], { type: filtType || blob.type || this.genType(fileName) });
-    saveAs(file, decodeURI(fileName || 'download'), option);
+    const file = new Blob([blob], { type: filtType ?? blob.type ?? this.genType(fileName) });
+    saveAs(file, decodeURI(fileName ?? 'download'), option);
   }
 
   saveText(txt: string, fileName?: string, option?: FileSaverOptions): void {

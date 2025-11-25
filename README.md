@@ -23,17 +23,6 @@ $ yarn add file-saver ngx-filesaver
 $ pnpm install file-saver ngx-filesaver
 ```
 
-Add the `FileSaverModule` module to your project：
-
-```ts
-import { FileSaverModule } from 'ngx-filesaver';
-
-@NgModule({
-  imports: [FileSaverModule],
-})
-export class AppModule {}
-```
-
 ## Instructions
 
 There are two ways to save a file: using `FileSaverService.save()` or using the `fileSaver` directive.

@@ -5,8 +5,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { HttpHeaders, provideHttpClient } from '@angular/common/http';
 import fs from 'file-saver';
 
-import { FileSaverDirective } from '../src/filesaver.directive';
-import { FileSaverService } from '../src/filesaver.service';
+import { FileSaverDirective } from './filesaver';
+import { FileSaverService } from './service';
 
 function genFile(_: string, isRealFile = true): Blob {
   const blob = new Blob([
@@ -36,10 +36,9 @@ describe('ngx-filesaver:', () => {
 
   ['xlsx', 'docx', 'pptx', 'pdf'].forEach((ext) => {
     it(`should be down ${ext}`, () => {
-      fixture.detectChanges();
-      spyOn(fs, 'saveAs');
+      vi.spyOn(fs, 'saveAs').mockClear();
       if (ext === 'docx') {
-        context.data = null;
+        context.data = undefined;
       }
       fixture.detectChanges();
       (dl.query(By.css('#down-' + ext)).nativeElement as HTMLButtonElement).click();
@@ -50,12 +49,11 @@ describe('ngx-filesaver:', () => {
   });
 
   it('should be using header filename when repseon has [filename]', () => {
-    fixture.detectChanges();
     let fn = '';
     const filename = 'newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake(((_: Blob | string, filename?: string) => {
+    vi.spyOn(fs, 'saveAs').mockImplementation(((_: Blob | string, filename?: string) => {
       fn = filename!;
-    }) as any);
+    }) as any).mockClear();
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
@@ -67,12 +65,11 @@ describe('ngx-filesaver:', () => {
   });
 
   it('should be using header filename when repseon has [x-filename]', () => {
-    fixture.detectChanges();
     let fn = '';
     const filename = 'x-newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake(((_: Blob | string, filename?: string) => {
+    vi.spyOn(fs, 'saveAs').mockImplementation(((_: Blob | string, filename?: string) => {
       fn = filename!;
-    }) as any);
+    }) as any).mockClear();
     context.fileName = null;
     fixture.detectChanges();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
@@ -85,7 +82,7 @@ describe('ngx-filesaver:', () => {
 
   it('should be throw error when a bad request', () => {
     fixture.detectChanges();
-    spyOn(context, 'error');
+    vi.spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
     const ret = httpBed.expectOne((req) => req.url.startsWith('/'));
@@ -95,7 +92,7 @@ describe('ngx-filesaver:', () => {
 
   it('should be throw error when a empty file', () => {
     fixture.detectChanges();
-    spyOn(context, 'error');
+    vi.spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
     const ret = httpBed.expectOne((req) => req.url.startsWith('/'));
@@ -105,8 +102,8 @@ describe('ngx-filesaver:', () => {
 
   it('should be throw error when http status is not 200', () => {
     fixture.detectChanges();
-    spyOn(fs, 'saveAs');
-    spyOn(context, 'error');
+    vi.spyOn(fs, 'saveAs').mockClear();
+    vi.spyOn(context, 'error');
     expect(context.error).not.toHaveBeenCalled();
     expect(fs.saveAs).not.toHaveBeenCalled();
     (dl.query(By.css('#down-docx')).nativeElement as HTMLButtonElement).click();
@@ -125,7 +122,7 @@ describe('ngx-filesaver:', () => {
 
   it('should be filesaver__not-support when not supoort fileSaver', () => {
     const srv = TestBed.inject(FileSaverService);
-    spyOnProperty(srv, 'isFileSaverSupported', 'get').and.returnValue(false);
+    vi.spyOn(srv, 'isFileSaverSupported', 'get').mockReturnValue(false);
     context.fileTypes = ['xlsx'];
     fixture.detectChanges();
     const el = dl.query(By.css('#down-xlsx')).nativeElement as HTMLButtonElement;
@@ -151,9 +148,8 @@ describe('change detection', () => {
   });
 
   it('should not run change detection at all when has no listeners', () => {
-    fixture.detectChanges();
     const appRef = TestBed.inject(ApplicationRef);
-    spyOn(appRef, 'tick');
+    vi.spyOn(appRef, 'tick');
     dl.query(By.css('#down-xlsx')).nativeElement.dispatchEvent(new Event('click'));
     const req = httpBed.expectOne((req) => req.url.startsWith('/'));
     req.flush(genFile('xlsx'));
@@ -164,22 +160,20 @@ describe('change detection', () => {
 @Component({
   template: `
     @for (i of fileTypes; track $index) {
-    <button
-      id="down-{{ i }}"
-      class="mr-sm"
-      fileSaver
-      query="data"
-      method="get"
-      url="/demo.{{ i }}"
-      [fileName]="fileName"
-      (success)="success()"
-      (error)="error()"
-    >
-      {{ i }}
-    </button>
+      <button
+        id="down-{{ i }}"
+        fileSaver
+        [query]="data"
+        method="get"
+        url="/demo.{{ i }}"
+        [fileName]="fileName"
+        (success)="success()"
+        (error)="error()"
+      >
+        {{ i }}
+      </button>
     }
   `,
-  standalone: true,
   imports: [FileSaverDirective],
 })
 class TestComponent {
@@ -190,7 +184,7 @@ class TestComponent {
     time: new Date(),
   };
 
-  fileName: string | null = 'demo中文';
+  fileName?: string | null = 'demo中文';
 
   success(): void { }
 
@@ -198,8 +192,7 @@ class TestComponent {
 }
 
 @Component({
-  template: '<button id="down-xlsx" fileSaver query="data" method="get" url="/demo.xlsx" [fileName]="fileName">xlsx</button>',
-  standalone: true,
+  template: '<button id="down-xlsx" fileSaver method="get" url="/demo.xlsx" [fileName]="fileName">xlsx</button>',
   imports: [FileSaverDirective],
 })
 class TestNoListenersComponent {

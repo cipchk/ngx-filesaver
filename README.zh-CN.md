@@ -17,15 +17,6 @@ Simple file save with FileSaver.js
 npm install file-saver ngx-filesaver --save
 ```
 
-添加 `FileSaverModule` 模块到项目中：
-
-```
-import { FileSaverModule } from 'ngx-filesaver';
-@NgModule({
-  imports: [ FileSaverModule ]
-})
-```
-
 ## 使用方法
 
 支持服务 `FileSaverService.save()` 或属性指令 `fileSaver` 两种保存方式。
@@ -50,37 +41,38 @@ onSave() {
 #### 配置型
 
 ```html
-<button type="button"
-        fileSaver
-        [method]="'GET'"
-        [fileName]="'中文pdf.pdf'"
-        [url]="'assets/files/demo.pdf'"
-        [header]="{ token: 'demo' }"
-        [query]="{ pi: 1, name: 'demo' }"
-        (success)="onSuc($event)"
-        (error)="onErr($event)">Download PDF</button>
+<button
+  type="button"
+  fileSaver
+  [method]="'GET'"
+  [fileName]="'中文pdf.pdf'"
+  [url]="'assets/files/demo.pdf'"
+  [header]="{ token: 'demo' }"
+  [query]="{ pi: 1, name: 'demo' }"
+  (success)="onSuc($event)"
+  (error)="onErr($event)"
+  >Download PDF</button
+>
 ```
 
 **fileSaver**：属性指令名称。
 **参数说明**
 
-参数 | 说明 | 类型 | 默认值
-----|------|-----|------
-`method` | 请求方法类型 | `string` | `GET`
-`url` | 下路路径 | `string` | -
-`fileName` | 文件名 | `string` | -
-`query` | 额外的查询参数，等同 `params` 值 | `string` | -
-`header` | 请求的 `headers` 属性值，一般用来指定 _token_ 之类 | `any` | -
-`fsOptions` | FileSaver.js 配置，可以设置 `autoBom` 等参数值 | `FileSaverOptions` | -
-`success` | 下载成功回调 | `EventEmitter<HttpResponse<Blob>>` | -
-`error` | 下载错误回调 | `EventEmitter<any>` | -
+| 参数        | 说明                                               | 类型                               | 默认值 |
+| ----------- | -------------------------------------------------- | ---------------------------------- | ------ |
+| `method`    | 请求方法类型                                       | `string`                           | `GET`  |
+| `url`       | 下路路径                                           | `string`                           | -      |
+| `fileName`  | 文件名                                             | `string`                           | -      |
+| `query`     | 额外的查询参数，等同 `params` 值                   | `string`                           | -      |
+| `header`    | 请求的 `headers` 属性值，一般用来指定 _token_ 之类 | `any`                              | -      |
+| `fsOptions` | FileSaver.js 配置，可以设置 `autoBom` 等参数值     | `FileSaverOptions`                 | -      |
+| `success`   | 下载成功回调                                       | `EventEmitter<HttpResponse<Blob>>` | -      |
+| `error`     | 下载错误回调                                       | `EventEmitter<any>`                | -      |
 
-#### 自定义Http型
+#### 自定义 Http 型
 
 ```html
-<button type="button"
-        fileSaver
-        [http]="onRemote('pdf', true)">Download PDF</button>
+<button type="button" fileSaver [http]="onRemote('pdf', true)">Download PDF</button>
 ```
 
 ```ts
@@ -98,14 +90,14 @@ onRemote(type: string, fromRemote: boolean): Observable<Response> {
 
 文件名的获取按以下优先级：fileName =》 response.headers.get('filename') =》 response.headers.get('x-filename')。
 
-如果你请求的是一个CORS跨域地址，需要注意设置 `Access-Control-Allow-Headers: filename`，以免无法获取。
+如果你请求的是一个 CORS 跨域地址，需要注意设置 `Access-Control-Allow-Headers: filename`，以免无法获取。
 
 #### 类名
 
-| 类名 | 描述 |
-| --- | ---- |
+| 类名                     | 描述                                                                             |
+| ------------------------ | -------------------------------------------------------------------------------- |
 | `filesaver__not-support` | 不 [兼容](https://github.com/eligrey/FileSaver.js/#supported-browsers) `Blob` 时 |
-| `filesaver__disabled` | 请求过程中 |
+| `filesaver__disabled`    | 请求过程中                                                                       |
 
 #### Configuring CommonJS dependencies
 

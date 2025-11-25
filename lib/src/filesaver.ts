@@ -1,26 +1,25 @@
 
-import { Directive, ElementRef, NgZone, OnInit, inject, DestroyRef, input } from '@angular/core';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { Directive, ElementRef, inject, DestroyRef, input } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { filter, fromEvent, Observable, Subject } from 'rxjs';
 import type { FileSaverOptions } from 'file-saver';
-import { FileSaverService } from './filesaver.service';
+import { FileSaverService } from './service';
 import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
   selector: '[fileSaver]',
   exportAs: 'fileSaver',
 })
-export class FileSaverDirective implements OnInit {
-  private readonly ngZone = inject(NgZone);
+export class FileSaverDirective {
   private readonly el = inject<ElementRef<HTMLButtonElement>>(ElementRef);
   private readonly fss = inject(FileSaverService);
   private readonly httpClient = inject(HttpClient);
   readonly method = input('GET');
   readonly http = input<Observable<HttpResponse<Blob>>>();
-  readonly query = input<any>();
-  readonly header = input<any>();
+  readonly query = input<HttpParams | Record<string, string | number | boolean | readonly (string | number | boolean)[]>>();
+  readonly header = input<HttpHeaders | Record<string, string | string[]>>();
   readonly url = input.required<string>();
-  readonly fileName = input<string>();
+  readonly fileName = input<string | null>();
   readonly fsOptions = input<FileSaverOptions>();
   private successEmitter = new Subject<HttpResponse<Blob>>();
   readonly success = outputFromObservable(this.successEmitter);
@@ -33,10 +32,7 @@ export class FileSaverDirective implements OnInit {
     if (!this.fss.isFileSaverSupported) {
       this.el.nativeElement.classList.add(`filesaver__not-support`);
     }
-  }
-
-  ngOnInit(): void {
-    this.ngZone.runOutsideAngular(() => this.setupClickListener());
+    this.setupClickListener();
   }
 
   private getName(res: HttpResponse<Blob>) {
@@ -53,23 +49,17 @@ export class FileSaverDirective implements OnInit {
     fromEvent(this.el.nativeElement, 'click')
       .pipe(
         filter(() => this.fss.isFileSaverSupported),
-        takeUntilDestroyed(this.d$),
+        takeUntilDestroyed(),
       )
       .subscribe(() => {
         let req = this.http();
 
         if (!req) {
-          let params = new HttpParams();
-          const query = this.query() || {};
-          for (const item in query) {
-            params = params.set(item, query[item]);
-          }
-
           req = this.httpClient.request(this.method(), this.url(), {
             observe: 'response',
             responseType: 'blob',
             headers: this.header(),
-            params,
+            params: this.query(),
           });
         }
 
