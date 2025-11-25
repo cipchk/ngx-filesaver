@@ -98,10 +98,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: build package
-        run: |
-          pnpm run build
-
       - name: build
         run: |
           node ./node_modules/@angular/cli/bin/ng build --base-href /ngx-filesaver/
