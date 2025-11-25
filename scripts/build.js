@@ -24,7 +24,7 @@ fs.writeJsonSync(libPackagePath, libPackageJson, { spaces: 2 });
 ngPackage
   .ngPackagr()
   .forProject(path.resolve(root, `./lib/ng-package.json`))
-  .withTsConfig(path.resolve(root, './lib/tsconfig.lib.json'))
+  .withTsConfig(path.resolve(root, './lib/tsconfig.lib.prod.json'))
   .build()
   .then(() =>
     fs.copyFileSync(
