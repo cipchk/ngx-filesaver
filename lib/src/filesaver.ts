@@ -1,7 +1,7 @@
 
 import { Directive, ElementRef, inject, DestroyRef, input } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
-import { filter, fromEvent, Observable, Subject } from 'rxjs';
+import { HttpClient, type HttpHeaders, type HttpParams, type HttpResponse } from '@angular/common/http';
+import { filter, fromEvent, type Observable, Subject } from 'rxjs';
 import type { FileSaverOptions } from 'file-saver';
 import { FileSaverService } from './service';
 import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
