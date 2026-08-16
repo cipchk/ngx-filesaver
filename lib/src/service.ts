@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { saveAs, FileSaverOptions } from 'file-saver';
 
 /** Check the `Blob` existance only once. */

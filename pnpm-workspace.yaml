@@ -1,0 +1,8 @@
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false
+  unrs-resolver: false
+minimumReleaseAgeExclude:
+  - eslint-plugin-jsdoc@64.2.0
