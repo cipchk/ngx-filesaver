@@ -1,14 +1,15 @@
-
-import { Directive, ElementRef, inject, input } from '@angular/core';
 import { HttpClient, type HttpHeaders, type HttpParams, type HttpResponse } from '@angular/common/http';
-import { filter, fromEvent, type Observable, Subject, switchMap } from 'rxjs';
-import type { FileSaverOptions } from 'file-saver';
-import { FileSaverService } from './service';
+import { Directive, ElementRef, inject, input } from '@angular/core';
 import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter, fromEvent, type Observable, Subject, switchMap } from 'rxjs';
+
+import type { FileSaverOptions } from 'file-saver';
+
+import { FileSaverService } from './service';
 
 @Directive({
   selector: '[fileSaver]',
-  exportAs: 'fileSaver',
+  exportAs: 'fileSaver'
 })
 export class FileSaverDirective {
   private readonly el = inject<ElementRef<HTMLButtonElement>>(ElementRef);
@@ -16,7 +17,9 @@ export class FileSaverDirective {
   private readonly httpClient = inject(HttpClient);
   readonly method = input('GET');
   readonly http = input<Observable<HttpResponse<Blob>>>();
-  readonly query = input<HttpParams | Record<string, string | number | boolean | readonly (string | number | boolean)[]>>();
+  readonly query = input<
+    HttpParams | Record<string, string | number | boolean | ReadonlyArray<string | number | boolean>>
+  >();
   readonly header = input<HttpHeaders | Record<string, string | string[]>>();
   readonly url = input.required<string>();
   readonly fileName = input<string | null>();
@@ -33,7 +36,7 @@ export class FileSaverDirective {
     this.setupClickListener();
   }
 
-  private getName(res: HttpResponse<Blob>) {
+  private getName(res: HttpResponse<Blob>): string {
     return decodeURI(this.fileName() || res.headers.get('filename') || res.headers.get('x-filename') || '');
   }
 
@@ -55,17 +58,17 @@ export class FileSaverDirective {
               observe: 'response',
               responseType: 'blob',
               headers: this.header(),
-              params: this.query(),
+              params: this.query()
             });
           }
 
           this.setDisabled(true);
           return req;
         }),
-        takeUntilDestroyed(),
+        takeUntilDestroyed()
       )
       .subscribe({
-        next: (response) => {
+        next: response => {
           if (response.status !== 200 || response.body!.size <= 0) {
             this.errorEmitter.next(response);
             return;
@@ -73,8 +76,8 @@ export class FileSaverDirective {
           this.fss.save(response.body, this.getName(response), undefined, this.fsOptions());
           this.successEmitter.next(response);
         },
-        error: (error) => this.errorEmitter.next(error),
-        complete: () => this.setDisabled(false),
+        error: error => this.errorEmitter.next(error),
+        complete: () => this.setDisabled(false)
       });
   }
 }

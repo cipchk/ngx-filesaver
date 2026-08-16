@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { FileSaverOptions } from 'file-saver';
 import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
 
@@ -35,7 +36,7 @@ import { FileSaverDirective, FileSaverService } from 'ngx-filesaver';
     <h1>fileSaver Directive</h1>
     <button type="button" fileSaver url="files/demo.docx">Save Word</button>
   `,
-  imports: [FormsModule, FileSaverDirective],
+  imports: [FormsModule, FileSaverDirective]
 })
 export class App {
   private readonly httpClient = inject(HttpClient);
@@ -43,18 +44,18 @@ export class App {
   protected text = `{ "text": "This is text file!中文" }`;
   protected fileName?: string;
   protected options: FileSaverOptions = {
-    autoBom: false,
+    autoBom: false
   };
 
-  protected onDown(type: string, fromRemote: boolean) {
+  protected onDown(type: string, fromRemote: boolean): void {
     const fileName = `save.${type}`;
     if (fromRemote) {
       this.httpClient
         .get(`files/demo.${type}`, {
           observe: 'response',
-          responseType: 'blob',
+          responseType: 'blob'
         })
-        .subscribe((res) => {
+        .subscribe(res => {
           this.fileSaverService.save(res.body, fileName);
         });
       return;
