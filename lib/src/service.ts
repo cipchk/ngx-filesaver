@@ -1,3 +1,4 @@
+import type { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { saveAs, FileSaverOptions } from 'file-saver';
@@ -34,13 +35,14 @@ export class FileSaverService {
     }
   }
 
-  save(blob: Blob | null, fileName?: string, filtType?: string, option?: FileSaverOptions): void {
+  save(blob: Blob | null, fileName?: string, filtType?: string, option?: FileSaverOptions, headers?: HttpHeaders): void {
     if (!blob) {
       throw new Error('Data argument should be a blob instance');
     }
 
-    const file = new Blob([blob], { type: filtType ?? blob.type ?? this.genType(fileName) });
-    saveAs(file, decodeURI(fileName ?? 'download'), option);
+    const name = fileName || headers?.get('filename') || headers?.get('x-filename');
+    const file = new Blob([blob], { type: filtType ?? blob.type ?? this.genType(name) });
+    saveAs(file, decodeURI(name ?? 'download'), option);
   }
 
   saveText(txt: string, fileName?: string, option?: FileSaverOptions): void {
